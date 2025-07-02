@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <title>VivacityGPT Complete - TTS bot</title>  
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;        
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(4, 190, 109, 1);
+  background-image: url("smoke_PNG965.png"),
+    url("smoke_PNG966.png"),
+    url("smoke_PNG967.png");
+  background-repeat: repeat-x;
+  background-position: 0 20%, 0 100%, 0 50%, 0 100%, 0 0;
+  background-size: 2000px, 2000px, 2000px;
+  animation: 120s smoke infinite linear;
+}
+
+@keyframes smoke {
+  100% {
+    background-position: -5000px 20%, -800px 95%, 500px 50%, 1000px 100%,
+      400px 0;
+  }
+}        
+
+.topnav {
+  overflow: hidden;
+  background-color: #000;
+        z-index: 100;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+        
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: rgba(4, 190, 109, 1);
+        
+  color: black;
+}
+
+.topnav a.active {
+  background-color: rgba(4, 190, 109, 1);
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+main {
+        position: absolute;
+        top: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+  margin: 1rem auto;
+  width: 80%;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 24px;
+  box-shadow: 0 6px 10px black;
+}
+#apikey {
+  width: 60%;
+  margin: 0.5rem;
+border-radius: 10px;
+padding: 4px 8px;
+}
+#prompt {
+  width: 90%;
+  margin: 0.5rem;
+  resize: none;
+border-radius: 10px;
+padding: 4px 8px;
+}
+audio {
+  margin-top: 1rem;
+}
+audio::-webkit-media-controls-panel {
+background: #fff;
+}
+select,
+button {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+margin-top: 4px;
+}
+button {
+  background: #f00;
+  color: #fff;
+}
+button:hover {
+  background: #fff;
+  color: #f00;
+}
+
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+main {
+  margin: 10px auto;
+  width: 80%;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 24px;
+  box-shadow: 0 6px 10px black;
+}
+}
+
+@media screen and (max-width: 800px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+main {
+  margin: 10px auto;
+  width: 80%;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 24px;
+  box-shadow: 0 6px 10px black;
+}
+}
+</style>
+        <script>
+        function loadContent() {
+            var content = localStorage.getItem("fromTxtchatbot");
+            if (content) {
+                document.getElementById("prompt").value = content;
+            }
+        }
+    </script>    
+        
+</head>
+<body onload="loadContent()">
+
+<div class="topnav" id="myTopnav">
+  <a href="index.html">Home</a>
+        <a href="total_chatbot.html">Total Analyzer</a> 
+  <a href="txtchatbot.html">Text Chatbot</a>
+  <a href="devbot.html">Web Dev Bot</a>          
+  <a href="dalle.html">Image Creator</a>
+  <a href="pdfchatbot.html">PDF Chatbot</a>
+  <a href="#" class="active">Text to Speech</a>
+        <a href="whisper.html">Audio Trascriber</a>
+<a href="vd_gpts.html">VD GPTs</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+
+<main>
+  <h1>OpenAI TTS Maker</h1>
+  <hr>
+  <label for="voiceSelect">Select a voice:</label><br>
+  <select id="voiceSelect">
+    <option value="alloy" selected>Alloy</option>
+    <option value="nova">Nova</option>
+    <option value="echo">Echo</option>
+    <option value="fable">Fable</option>
+    <option value="onyx">Onyx</option>
+    <option value="shimmer">Shimmer</option>      
+  </select><br>
+  <audio controls id="audioPlayer"></audio><br>
+
+  <input type="password" id="apikey" placeholder="Your API key" readonly><br>
+
+  <textarea id="prompt" placeholder="Your prompt" rows=14></textarea><br>
+  <button onclick="convertiTestoInAudio()">Convert Text to Audio</button>
+</main>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+
+function convertiTestoInAudio() {
+  const apikey = localStorage.getItem("openaikey"); 
+  document.getElementById("apikey").value = apikey;
+  console.log(apikey);
+  const prompt = document.getElementById("prompt").value;
+  const selectedvoice = document.getElementById("voiceSelect").value;
+
+  if (prompt) {
+    fetch("https://api.openai.com/v1/audio/speech", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apikey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini-tts",
+        input: prompt,
+        voice: selectedvoice
+      })
+    })
+      .then((response) => response.blob())
+      .then((blob) => {
+        const audioUrl = URL.createObjectURL(blob);
+        const audioPlayer = document.getElementById("audioPlayer");
+        audioPlayer.src = audioUrl;
+        audioPlayer.play();
+      })
+      .catch((error) => {
+        console.error("Errore while converting TTS: ", error);
+      });
+  } else {
+    alert("Please insert a text prompt before converting.");
+  }
+}
+
+</script>
+
+</body>
+</html>

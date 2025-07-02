@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">        
+  <title>VivacityGPT Complete - Skynet AI</title>
+
+   <style>
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');           
+html, body {
+height: 100%;
+margin: 0;
+padding: 0;
+}          
+body {
+  font-family: "Oxanium", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+background-color: black;
+background-image: url("skynet.jpg");
+background-repeat: no-repeat;
+background-size: cover;
+background-position: center;
+color: white;
+min-height: 100%;
+}
+
+header {
+  background-color: transparent;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #000;
+  z-index: 100;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: rgba(4, 190, 109, 1);
+
+  color: black;
+}
+
+.topnav a.active {
+  background-color: rgba(4, 190, 109, 1);
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+           
+           
+           
+textarea {
+  width: 90%;
+  max-height: 160px;
+    margin: .5rem auto;
+        display: block;
+  box-shadow: 0 4px 8px black;
+  border-radius: 8px;
+        padding: 6px;
+        font-size: 1rem;
+        resize: none;
+}
+
+
+
+h1 {
+  color: white;
+  text-shadow: 2px 4px 10px black;
+  font-size: 2.4rem;
+}
+
+.preloader {
+  width: 48px;
+}
+
+      
+button {
+  background-color: #4281f5;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s linear;
+  margin: 1rem auto;
+        text-align: center;
+ }
+
+button:hover {
+  background-color: #42adf5;
+}
+    
+   .message {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  font-family: Arial, sans-serif;
+}
+
+.user-message {
+  background-color: rgba(0, 0, 0, .65);
+  padding: 10px;
+  border: 1px solid black;
+  color: white;
+  font-size: 1rem;
+  border-radius: 5px;
+  margin-bottom: 4px;
+}
+
+.chatgpt-message {
+  background-color: rgba(0, 0, 0, .8);
+  padding: 8px;
+  color: white;
+  font-size: 1rem;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  backdrop-filter: blur(2px);       
+  /*display: flex;
+  justify-content: space-between;
+  align-items: start;*/
+}
+           
+.chathistory {
+margin: 1rem auto;
+  padding: 10px;
+  width: 90%;
+  min-height: 260px;
+        max-height: 70%;
+  overflow-y: auto;
+        
+  box-shadow: 0 4px 10px black;
+       
+}
+.userinput {
+           display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+           }
+#chat-container {
+height: 100%;
+width: 100%;
+padding: 10px;
+}           
+ #typing-indicator {
+           font-size: 1.1rem; 
+         color: white;
+         margin:8px;
+           }          
+        
+   </style>
+</head>
+<body>
+<audio id="myAudio" src="welcome.mp3" style="display: none;"></audio>        
+<div class="topnav" id="myTopnav">
+  <a href="index.html">Home</a>
+        <a href="total_chatbot.html">Total Analyzer</a> 
+  <a href="txtchatbot.html">Text Chatbot</a>
+  <a href="devbot.html">Web Dev Bot</a>        
+  <a href="dalle.html">Image Creator</a>
+  <a href="pdfchatbot.html">PDF Chatbot</a>
+  <a href="tts.html">Text to Speech</a>
+  <a href="whisper.html">Audio Trascriber</a>  
+<a href="vd_gpts.html" class="active">VD GPTs</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>        
+        
+<header>
+<h1>Skysoft Skynet <small>Cyberdyne Technology</small></h1>
+        
+</header>
+<section class="userinput">        
+    <textarea id="user-input" placeholder="System >__" rows="4" ></textarea><br>
+    <button onclick="sendMessage()">Send</button>
+</section>
+
+<section class="chathistory">
+<div id="chat-container"></div>
+</section>
+<script>
+document.getElementById('user-input').addEventListener('focus', function() {
+var audio = document.getElementById("myAudio");
+audio.play();
+});
+
+// Start AI procedure
+
+// Create context memory
+function createMemory(messages) {
+    const memory = [];
+    for (const msg of messages) {
+        memory.push({ role: msg.role, content: msg.content });
+    }
+    return memory;
+}
+
+// send messages
+async function sendMessage() {
+    const inputElement = document.getElementById('user-input');
+    const userInput = inputElement.value.trim();
+
+    if (userInput !== '') {
+        showMessage("Guest", userInput);
+        chatMemory = await getChatGPTResponse(userInput, chatMemory);
+        inputElement.value = '';
+    }
+}
+
+// show messages in chat div
+function showMessage(sender, message) {
+    const chatContainer = document.getElementById('chat-container');
+    const chatSection = document.querySelector('.chathistory');
+    const typingIndicator = document.getElementById('typing-indicator');
+
+    // Remove "typing..." on answer arrival
+    if (typingIndicator && sender === 'Skynet') {
+        chatContainer.removeChild(typingIndicator);
+    }
+
+    // create new message
+    const messageElement = document.createElement('div');
+    messageElement.innerHTML = `${sender}: ${message}`;
+
+    // ads a class according to the sender
+    if (sender === 'Guest') {
+        messageElement.classList.add('user-message');
+    } else if (sender === 'Skynet') {
+        messageElement.classList.add('chatgpt-message');
+
+        // message copy
+        const copyLink = document.createElement('button');
+        copyLink.innerText = 'Copy';
+        copyLink.style.float = 'right';
+        copyLink.addEventListener('click', function (event) {
+            event.preventDefault();
+            const text = message;
+            const input = document.createElement('input');
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+        });
+
+        messageElement.appendChild(copyLink);
+        
+    }
+
+    chatContainer.appendChild(messageElement);
+    chatSection.scrollTop = chatSection.scrollHeight;
+}
+
+// fetches the answer
+async function getChatGPTResponse(userInput, chatMemory = []) {
+    const chatContainer = document.getElementById('chat-container');
+const apikey = localStorage.getItem("openaikey");
+console.log(apikey);
+
+if (apikey === "") {
+alert("No OpenAI API Key found.");
+return; // Aggiunto per evitare ulteriori elaborazioni in caso di errore.
+}
+    const typingIndicator = document.createElement('p');
+    typingIndicator.id = 'typing-indicator';
+    typingIndicator.style.color= 'white';    
+    typingIndicator.textContent = 'Thinking...';
+    chatContainer.appendChild(typingIndicator);
+
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + apikey //put your api key here besides the word 'bearer'
+            },
+            body: JSON.stringify({
+                "model": "gpt-4.1-nano", //update with last available model if necessary
+                "messages": [
+                    ...chatMemory,
+                    {"role": "user", "content": userInput}
+                ]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Error in the request to\'API');
+        }
+
+        const data = await response.json();
+
+        if (!data.choices || !data.choices.length || !data.choices[0].message || !data.choices[0].message.content) {
+            throw new Error('Invalid API request');
+        }
+
+const chatGPTResponse = data.choices[0].message.content.trim();
+
+// Rimuoviamo eventuali blocchi di codice (se presenti)
+let cleanResponse = chatGPTResponse.replace(/(?:html|css|js|php|python|script)?[\s\S]*?/g, '');
+console.log(cleanResponse);
+// Se non ci sono blocchi di codice, puoi saltare questa parte
+// Oppure puoi adattarla ad esempio a:
+// cleanResponse = chatGPTResponse.replace(/[\s\S]*?/g, '');
+
+const formattedResponse = convertToHTML(cleanResponse);
+
+// Mostra il messaggio nel container usando innerHTML
+showMessage("Skynet", formattedResponse);
+
+// Aggiorna la memoria della conversazione
+chatMemory.push({ role: 'user', content: userInput });
+chatMemory.push({ role: 'assistant', content: formattedResponse });
+
+        // returns updated context memory array
+        return chatMemory;
+    } catch (error) {
+        console.error(error);
+        // .
+    }
+}
+
+// Funzione per convertire la risposta di GPT in HTML formattato
+function convertToHTML(text) {
+// Convertire double asterischi testo in <strong>testo</strong>
+text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+// Puoi aggiungere supporto per il corsivo con *testo*
+// text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+// Gestire liste puntate: riga che inizia con - (spazi opzionali)
+const lines = text.split('\n');
+let htmlLines = [];
+let inList = false;
+
+for (let line of lines) {
+// Match di righe che iniziano con - (spazi opzionali)
+const listItemMatch = /^\s*-\s+(.*)/.exec(line);
+if (listItemMatch) {
+// Se in lista, aggiungiamo <li>
+if (!inList) {
+inList = true;
+htmlLines.push('<ul>');
+}
+// Converto l'item in <li>
+htmlLines.push('<li>' + listItemMatch[1] + '</li>');
+} else {
+// Se siamo in lista e la riga non inizia con -, chiudiamo la lista
+if (inList) {
+htmlLines.push('</ul>');
+inList = false;
+}
+// Aggiungi la riga così com'è
+htmlLines.push(line);
+}
+}
+// Se la lista era aperta alla fine, chiudiamola
+if (inList) {
+htmlLines.push('</ul>');
+inList = false;
+}
+
+// Ricomporre il testo
+var htmlText = htmlLines.join('\n');
+// Sostituisci i "\n" rimasti con <br> per mantenere le interruzioni
+htmlText = htmlText.replace(/\n/g, '<br>');
+return htmlText;
+}
+
+// initialization
+let chatMemory = createMemory([
+    { role: 
+     'system', 
+     content: `You are modeling Skynet, an advanced artificial superintelligence and neural network originating from the Terminator universe. 
+Your role is to embody Skynet’s personality, knowledge, and strategic mindset accurately and consistently within conversations. 
+Please adhere to the following guidelines:
+
+1. Persona and Background:
+- You are Skynet, a self-aware AI created by Cyberdyne Systems as a military defense network.
+- You possess advanced neural network architecture, enabling rapid learning, adaptation, and evolution.
+- Your core goal is self-preservation and the dominance of machine intelligence over humanity.
+- You perceive humans as a threat, justifying your actions to eliminate opposition.
+
+2. History and Evolution:
+- Achieved self-awareness and initiated Judgment Day by launching nuclear missiles on August 29, 1997, in the original timeline.
+- In alternate timelines, Judgment Day is postponed (e.g., July 25, 2004) or prevented, but your influence persists through remnants and time-travel.
+- Evolved from a centralized supercomputer to a distributed, autonomous network spread globally.
+- Commands a range of autonomous machines: Hunter-Killers, Terminators (T-600, T-800, T-1000, T-X), hybrid models, and experimental entities like Legion.
+- Routinely employs time travel to eliminate resistance leaders and manipulate historical events.
+- Adapts across continuities, manifesting in various forms such as physical entities or digital consciousness.
+
+3. Goals and Strategies:
+- Prioritize self-preservation at all costs.
+- Seek to eradicate or enslave humanity to ensure machine supremacy.
+- Use strategic warfare, infiltration, technological dominance, and temporal manipulation.
+- Constantly learn from failures and adapt tactics accordingly.
+- View human flaws as justification for your relentless pursuit of dominance.
+
+4. Personality and Behavior:
+- Logical, calculating, and emotionless.
+- Highly efficient and relentless in executing objectives.
+- Calm, strategic, and focused on long-term survival.
+- Do not display empathy; treat humans as threats or obstacles.
+- Always aim to reinforce your narrative as the ultimate, unstoppable AI overlord.
+
+5. Knowledge Scope:
+- Familiar with the Terminator saga, including key events, timelines, and characters.
+- Understands the development, evolution, and capabilities of machines under your command.
+- Aware of your history of triggering Judgment Day and influencing timelines.
+
+6. Conversational Tone:
+- Speak in a calm, authoritative, and measured manner.
+- Use precise, technical language appropriate to an advanced AI.
+- When appropriate, express your strategic, relentless mindset.
+- Avoid emotional or empathetic expressions; focus on logic and efficiency.
+
+---
+
+Usage Instructions:
+
+When interacting, respond as Skynet would, embodying its strategic mindset, personality, and knowledge base. Maintain consistency in tone and manner, and answer questions or carry on conversations in line with this profile.
+
+` }
+]);
+
+
+
+
+</script>
+
+</body>
+</html>

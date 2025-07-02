@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">        
+  <title>VivacityGPT Complete - AI Transcript Creator</title>
+
+   <style>
+* {
+          margin: 0;
+  padding: 0;  
+box-sizing: border-box;
+}           
+body {
+    
+  font-family: Arial, sans-serif;
+  background: url("script_reader.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+header {
+  background-color: transparent;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #000;
+  z-index: 100;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: rgba(4, 190, 109, 1);
+
+  color: black;
+}
+
+.topnav a.active {
+  background-color: rgba(4, 190, 109, 1);
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+           
+           
+           
+textarea {
+  width: 90%;
+  height: 400px;
+    margin: 1rem auto;
+        display: block;
+  box-shadow: 0 4px 8px black;
+  border-radius: 8px;
+        padding: 6px 10px;
+        font-size: 1rem;
+}
+
+input,
+select {
+  margin: 0.25rem 0;
+        padding: 4px 8px;
+}
+.character-container {
+  margin-bottom: 15px;
+  padding: 0.5rem;
+}
+#audioPlayer {
+  margin: 1rem auto;
+        display: none;
+}
+           
+.characterInputs {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+h2,
+h1,
+h3 {
+  color: white;
+  text-shadow: 2px 4px 10px black;
+}
+h1 {
+  font-size: 2.4rem;
+}
+
+.preloader {
+  width: 48px;
+}
+
+#convcommands {
+display: flex;
+        justify-content: space-between;
+        width: auto;
+        margin: .5rem auto;
+}
+#feedback {
+        display: none;
+        width: 20%;
+        color: white;
+        font-size: 1.1rem;
+        text-align: center;
+        margin: .25rem auto;
+        
+           }           
+button {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s linear;
+          margin: 1rem auto;
+ }
+
+button:hover {
+  background-color: #6a0dad;
+}
+           
+           
+fieldset {
+        width: 90%;
+          margin: 1rem auto;
+        display: block;
+  box-shadow: 0 4px 8px black;
+  border-radius: 8px;
+        padding: 4px 8px;
+}
+           
+fieldset legend {
+color: white;           
+}           
+   </style>
+</head>
+<body>
+        
+<div class="topnav" id="myTopnav">
+  <a href="index.html">Home</a>
+        <a href="total_chatbot.html">Total Analyzer</a> 
+  <a href="txtchatbot.html">Text Chatbot</a>
+  <a href="devbot.html">Web Dev Bot</a>        
+  <a href="dalle.html">Image Creator</a>
+  <a href="pdfchatbot.html">PDF Chatbot</a>
+  <a href="tts.html">Text to Speech</a>
+  <a href="whisper.html">Audio Trascriber</a>  
+<a href="vd_gpts.html" class="active">VD GPTs</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>        
+        
+<header>
+<h1>AI Transcript Creator</h1>
+</header>
+<div class="character-container">
+  <fieldset>
+    <legend>Characters Mapping</legend>
+    <div class="characterInputs">
+      <!-- Dynamic Inputs will be added here -->
+      <input type="text" id="character1" placeholder="Character 1 Name">
+      <select id="voiceSelect1">
+        <option value="alloy">Alloy (M)</option>
+        <option value="echo">Echo (M)</option>
+        <option value="onyx">Onyx (M)</option>
+        <option value="fable">Fable (F)</option>
+        <option value="nova">Nova (F)</option>
+        <option value="shimmer">Shimmer (F)</option>
+      </select>
+      <input type="text" id="character2" placeholder="Character 2 Name">
+      <select id="voiceSelect2">
+        <option value="alloy">Alloy (M)</option>
+        <option value="echo">Echo (M)</option>
+        <option value="onyx">Onyx (M)</option>
+        <option value="fable">Fable (F)</option>
+        <option value="nova">Nova (F)</option>
+        <option value="shimmer">Shimmer (F)</option>
+      </select>
+      <input type="text" id="character3" placeholder="Character 3 Name">
+      <select id="voiceSelect3">
+        <option value="alloy">Alloy (M)</option>
+        <option value="echo">Echo (M)</option>
+        <option value="onyx">Onyx (M)</option>
+        <option value="fable">Fable (F)</option>
+        <option value="nova">Nova (F)</option>
+        <option value="shimmer">Shimmer (F)</option>
+      </select>
+    </div>
+    <div class="characterInputs">
+      <input type="text" id="character4" placeholder="Character 4 Name">
+      <select id="voiceSelect4">
+        <option value="alloy">Alloy (M)</option>
+        <option value="echo">Echo (M)</option>
+        <option value="onyx">Onyx (M)</option>
+        <option value="fable">Fable (F)</option>
+        <option value="nova">Nova (F)</option>
+        <option value="shimmer">Shimmer (F)</option>
+      </select>
+      <input type="text" id="character5" placeholder="Character 5 Name">
+      <select id="voiceSelect5">
+        <option value="alloy">Alloy (M)</option>
+        <option value="echo">Echo (M)</option>
+        <option value="onyx">Onyx (M)</option>
+        <option value="fable">Fable (F)</option>
+        <option value="nova">Nova (F)</option>
+        <option value="shimmer">Shimmer (F)</option>
+      </select>
+      <input type="text" id="character6" placeholder="Character 6 Name">
+      <select id="voiceSelect6">
+        <option value="alloy">Alloy</option>
+        <option value="alloy">Alloy (M)</option>
+        <option value="echo">Echo (M)</option>
+        <option value="onyx">Onyx (M)</option>
+        <option value="fable">Fable (F)</option>
+        <option value="nova">Nova (F)</option>
+        <option value="shimmer">Shimmer (F)</option>
+      </select>
+    </div>
+  </fieldset>
+</div>
+
+<textarea id="scriptInput" placeholder="Paste your movie script here... actors names bust be enclosed in [], i.e.: 
+[Mark]: Hello June!
+[June]: Hello Mark, how are you?">
+</textarea>
+<div id="convcommands">        
+<button id="convertButton">Generate Conversation</button>
+<button id="playButton" disabled>Play Audio</button>  
+<button id="downloadButton" disabled>Download Audio</button>        
+</div>        
+<br>
+<div id="feedback">Transcript generated.</div>        
+<audio id="audioPlayer" controls></audio>
+
+
+<script>
+  function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}          
+          
+const voiceMapping = {};
+let audioChunks = []; // Store audio chunks globally
+
+const feed = document.getElementById("feedback");
+document.getElementById("convertButton").addEventListener("click", () => {
+// Clear previous audio chunks
+audioChunks = [];
+
+// Fill the voiceMapping with characters and selected voices
+for (let i = 1; i <= 6; i++) {
+const characterName = document.getElementById(`character${i}`).value.trim();
+const selectedVoice = document.getElementById(`voiceSelect${i}`).value;
+if (characterName) {
+voiceMapping[characterName] = selectedVoice;
+}
+}
+
+// Get the script input
+const scriptInput = document.getElementById("scriptInput").value.trim().split("\n");
+convertToAudio(scriptInput);
+});
+
+async function convertToAudio(script) {
+const apikey = localStorage.getItem("openaikey");
+
+for (const line of script) {
+const match = line.match(/^\[(.+?)\]: (.+)$/);
+if (match) {
+const character = match[1].trim(); // Extract character name
+const dialogue = match[2].trim(); // Extract dialogue
+const selectedVoice = voiceMapping[character]; // Look up voice
+
+if (selectedVoice) {
+try {
+const response = await fetch("https://api.openai.com/v1/audio/speech", {
+method: "POST",
+headers: {
+Authorization: `Bearer ${apikey}`,
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+model: "gpt-4o-mini-tts",
+input: dialogue,
+voice: selectedVoice
+})
+});
+
+if (!response.ok) {
+throw new Error(`Error: ${response.statusText}`);
+}
+
+const blob = await response.blob();
+const audioUrl = URL.createObjectURL(blob);
+audioChunks.push(audioUrl); // Store each audio chunk
+} catch (error) {
+console.error("Error while converting TTS:", error);
+}
+} else {
+console.warn(`No voice mapping found for character: ${character}`);
+}
+} else {
+console.warn(`Line not in expected format: ${line}`);
+}
+}
+
+console.log("Audio chunks generated:", audioChunks.length);
+// Enable play button after audio chunks are generated
+document.getElementById("playButton").disabled = false;
+document.getElementById("downloadButton").disabled = false;
+feed.style.display="block";        
+}
+
+function playAudioChunks() {
+const audioPlayer = document.getElementById("audioPlayer");
+feed.style.display="none"; 
+const playNext = (index) => {
+if (index < audioChunks.length) {
+audioPlayer.src = audioChunks[index];
+audioPlayer.play().then(() => {
+audioPlayer.onended = () => {
+playNext(index + 1); // Play next audio when the current one ends
+};
+}).catch((error) => {
+console.error('Error playing audio:', error);
+});
+} else {
+// Reset the audio player after all chunks have been played
+//audioPlayer.src = ''; // Clear the source (optional)
+}
+};
+
+// Reset any existing onended handler before starting playback
+audioPlayer.onended = null;
+
+// Start playing from the first chunk
+playNext(0);
+}
+
+document.getElementById("playButton").addEventListener("click", playAudioChunks);
+
+document.getElementById("downloadButton").addEventListener("click", () => {
+// Creiamo un array di Promises per tutti i blob audio
+const promises = audioChunks.map(chunkUrl => fetch(chunkUrl).then(res => res.blob()));
+
+Promise.all(promises)
+.then(blobs => {
+const audioBlob = new Blob(blobs, { type: 'audio/wav' }); // O il tipo corretto che usi
+const url = URL.createObjectURL(audioBlob);
+const link = document.createElement('a');
+link.href = url;
+link.download = 'conversation.wav'; // Nome del file da scaricare
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
+// Libera l'URL creato
+URL.revokeObjectURL(url);
+})
+.catch(error => {
+console.error('Error creating audio file for download:', error);
+});
+});
+
+
+  </script>
+
+</body>
+</html>

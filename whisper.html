@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>VivacityGPT Complete - STT bot</title> 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">        
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;        
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(4, 190, 109, 1);
+  background-image: url("smoke_PNG965.png"),
+    url("smoke_PNG966.png"),
+    url("smoke_PNG967.png");
+  background-repeat: repeat-x;
+  background-position: 0 20%, 0 100%, 0 50%, 0 100%, 0 0;
+  background-size: 2000px, 2000px, 2000px;
+  animation: 120s smoke infinite linear;
+}
+
+@keyframes smoke {
+  100% {
+    background-position: -5000px 20%, -800px 95%, 500px 50%, 1000px 100%,
+      400px 0;
+  }
+}        
+
+.topnav {
+  overflow: hidden;
+  background-color: #000;
+        z-index: 100;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+        
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: rgba(4, 190, 109, 1);
+        
+  color: black;
+}
+
+.topnav a.active {
+  background-color: rgba(4, 190, 109, 1);
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+main {
+        position: absolute;
+        top: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+  margin: 1rem auto;
+  width: 80%;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 24px;
+  box-shadow: 0 6px 10px black;
+}
+#apikey {
+  width: 60%;
+  margin: 0.5rem;
+border-radius: 10px;
+padding: 4px 8px;
+}
+#prompt {
+  width: 80%;
+  margin: 0.5rem;
+  resize: none;
+border-radius: 10px;
+padding: 4px 8px;
+}
+
+
+button {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+margin-top: 4px;
+}
+button {
+  background: #f00;
+  color: #fff;
+}
+button:hover {
+  background: #fff;
+  color: #f00;
+}
+
+#transcriptionResult {
+  margin: .5rem auto;
+  display: flex;
+  flex-direction: column;
+        align-items: center;
+  height: 24rem;
+  width: 95%;
+  overflow-y: auto;
+  padding: 0.5rem;
+  font-family: "Spectral", serif;
+  border: 1px solid black;
+        text-align: justify;
+}
+
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+main {
+  margin: 10px auto;
+  width: 80%;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 24px;
+  box-shadow: 0 6px 10px black;
+}
+#transcriptionResult {
+  margin: .5rem auto;
+  display: flex;
+  flex-direction: column;
+        align-items: center;
+  height: 20rem;
+  width: 90%;
+  overflow-y: auto;
+  padding: 0.25rem;
+  font-family: "Spectral", serif;
+  border: 1px solid black;
+  text-align: justify;
+        font-size: .8rem;
+}         
+
+#commands{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        }
+        
+}
+
+@media screen and (max-width: 900px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+main {
+  margin: 10px auto;
+  width: 80%;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 24px;
+  box-shadow: 0 6px 10px black;
+}
+#transcriptionResult {
+  margin: .5rem auto;
+  display: flex;
+  flex-direction: column;
+        align-items: center;
+  height: 20rem;
+  width: 90%;
+  overflow-y: auto;
+  padding: 0.5rem;
+  font-family: "Spectral", serif;
+  border: 1px solid black;
+  text-align: justify;
+        font-size: .9rem;
+}        
+        
+}
+</style>
+</head>
+<body>
+<div class="topnav" id="myTopnav">
+  <a href="index.html">Home</a>
+        <a href="total_chatbot.html">Total Analyzer</a> 
+  <a href="txtchatbot.html">Text Chatbot</a>
+  <a href="devbot.html">Web Dev Bot</a>          
+  <a href="dalle.html">Image Creator</a>
+  <a href="pdfchatbot.html">PDF Chatbot</a>
+  <a href="tts.html">Text to Speech</a>
+  <a href="#" class="active">Audio Transcriber</a>
+<a href="vd_gpts.html">VD GPTs</a>    
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+<main>
+  <h1>OpenAI Whisper</h1>
+  <hr>
+<label for="audioFileInput">Select an audio file (MP3, M4A, WAV):</label><br>
+<input type="file" id="audioFileInput"><br>
+<input type="password" id="apikey" placeholder="Your API key" readonly><br>
+<div id="commands">        
+<button onclick="transcribeAudio()">Transcribe Audio</button>
+<button onclick="translateToEnglish()">Translate to English</button>        
+<button id="export">Save Result</button>
+</div>
+<div id="transcriptionResult"></div>
+</main>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+        
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}        
+        
+//whisper API interrogation for Transcription
+function transcribeAudio() {
+  const apikey = localStorage.getItem("openaikey");      
+  document.getElementById("apikey").value = apikey; 
+console.log(apikey);        
+      
+
+const audioFile = document.getElementById("audioFileInput").files[0];
+
+if (audioFile) {
+const formData = new FormData();
+formData.append('file', audioFile);
+formData.append('model', 'whisper-1');
+
+fetch('https://api.openai.com/v1/audio/transcriptions', {
+method: "POST",
+headers: {
+'Authorization': `Bearer ${apikey}`,
+},
+body: formData
+})
+.then((response) => response.json())
+.then((data) => {
+document.getElementById('transcriptionResult').innerText = data.text;
+})
+.catch((error) => {
+console.error("Errore durante la trascrizione dell'audio: ", error);
+});
+} else {
+alert("Per favore, carica un file audio prima di avviare la trascrizione.");
+}
+}
+
+//whisper API interrogation for Tranlation
+function translateToEnglish() {
+const apikey = document.getElementById("apikey").value;
+const audioFile = document.getElementById("audioFileInput").files[0];
+
+if (audioFile) {
+const formData = new FormData();
+formData.append('file', audioFile);
+formData.append('model', 'whisper-1');        
+//formData.append('target_language', 'en');
+
+fetch('https://api.openai.com/v1/audio/translations', {
+method: "POST",
+headers: {
+'Authorization': `Bearer ${apikey}`,
+},
+body: formData
+})
+.then((response) => response.json())
+.then((data) => {
+document.getElementById('transcriptionResult').innerText = data.text;
+})
+.catch((error) => {
+console.error("Error translating audio to English: ", error);
+});
+} else {
+alert("Please upload an audio file before starting the translation.");
+}
+}        
+</script>
+<script>
+//Save Chat Function
+var saveButtont = document.getElementById("export");
+saveButtont.addEventListener("click", handleSaveButtontClick);
+
+function handleSaveButtontClick() {
+  saveChatContentTxt();
+}
+
+function saveChatContentTxt() {
+  var chatContent = document.getElementById("transcriptionResult").innerText;
+
+  var currentTimestamp = new Date();
+  var datetime = currentTimestamp.toISOString();
+  var filename = "whisper_v" + datetime.replace(/[-:.]/g, "");
+
+  var blob = new Blob([chatContent], { type: "text/plain" });
+
+  var url = URL.createObjectURL(blob);
+
+  var downloadLink = document.createElement("a");
+  downloadLink.href = url;
+  downloadLink.download = filename + ".txt";
+  downloadLink.click();
+  URL.revokeObjectURL(url);
+}
+
+</script>
+
+</body>
+</html>

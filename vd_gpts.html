@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <title>VivacityGPT Complete</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(4, 190, 109, 1);
+  background-image: url("smoke_PNG965.png"), url("smoke_PNG966.png"),
+    url("smoke_PNG967.png");
+  background-repeat: repeat-x;
+  background-position: 0 20%, 0 100%, 0 50%, 0 100%, 0 0;
+  background-size: 2000px, 2000px, 2000px;
+  animation: 120s smoke infinite linear;
+}
+
+@keyframes smoke {
+  100% {
+    background-position: -5000px 20%, -800px 95%, 500px 50%, 1000px 100%,
+      400px 0;
+  }
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #000;
+  z-index: 100;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: rgba(4, 190, 109, 1);
+
+  color: black;
+}
+
+.topnav a.active {
+  background-color: rgba(4, 190, 109, 1);
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+.heading {
+  font-size: 2.4rem;
+}
+
+hr {
+  background: transparent;
+  height: 4px;
+  border: 1px solid black inset;
+}
+#intro,
+#content {
+  margin: 0 auto;
+  width: 90%;
+  font-size: 1rem;
+  text-align: justify;
+}
+
+#content {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  flex-wrap: wrap;
+}
+
+.avatar {
+  padding: 4px;
+  margin: 0.5rem 0;
+}
+.avatar img {
+  border-radius: 10px;
+}
+
+main {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 1rem auto;
+  width: 80%;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 24px;
+  box-shadow: 0 6px 10px black;
+  margin-bottom: 1rem;
+}
+.footer {
+  font-size: 0.9rem;
+  text-align: center;
+  margin: 2rem 0 0.5rem 0;
+  width: 100%;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 4px;
+  background: #f00;
+  color: #fff;
+}
+button:hover {
+  background: #fff;
+  color: #f00;
+}
+
+.card {
+  border: 1px solid #ccc; /* Bordo delle card */
+  border-radius: 10px; /* Angoli arrotondati */
+  overflow: hidden; /* Nasconde eventuali sporgenze */
+  margin: 0.25rem; /* Margine intorno alle card */
+  width: 30%; /* Larghezza delle card, raggruppate in due */
+  height: auto;
+  padding: 0.5rem;
+}
+
+.card-image {
+  width: 100%; /* Larghezza dell'immagine */
+  height: 200px; /* Altezza automatica */
+}
+
+.card-content {
+  padding: 15px; /* Spaziatura interna della card */
+}
+
+.card-link {
+  display: inline-block;
+  margin-top: 10px; /* Spazio sopra il link */
+  text-decoration: none; /* Rimuove la sottolineatura */
+  color: black; /* Colore del link */
+}
+
+.card-link:hover {
+  text-decoration: underline; /* Sottolinea il link al passaggio del mouse */
+}
+
+.card h2 {
+        font-size: 1.4rem;
+        text-align: left;
+        }        
+        
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {
+    display: none;
+  }
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+  main {
+    margin: 20px auto;
+    width: 80%;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 24px;
+
+    box-shadow: 0 6px 10px black;
+    margin-bottom: 1rem;
+  }
+
+  #content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .heading {
+    font-size: 1.8rem;
+  }
+  #intro,
+  #content {
+    margin: 0 auto;
+    width: 90%;
+    font-size: 0.9rem;
+    text-align: justify;
+  }
+
+  .footer {
+    font-size: 0.7rem;
+    text-align: center;
+    margin: 0.5rem auto;
+    width: 100%;
+  }
+
+  .card {
+    border: 1px solid #ccc; /* Bordo delle card */
+    border-radius: 10px; /* Angoli arrotondati */
+    overflow: hidden; /* Nasconde eventuali sporgenze */
+    margin: 0.25rem; /* Margine intorno alle card */
+    width: 90%; /* Larghezza delle card, raggruppate in due */
+    height: auto;
+    padding: 0.25rem;
+  }
+  .card-image {
+    width: 100%; /* Larghezza dell'immagine */
+    height: 200px; /* Altezza automatica */
+  }
+
+  .card-content {
+    padding: 8px; /* Spaziatura interna della card */
+  }
+
+  .card-link {
+    display: inline-block;
+    margin-top: 10px; /* Spazio sopra il link */
+    text-decoration: none; /* Rimuove la sottolineatura */
+    color: black; /* Colore del link */
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .topnav.responsive {
+    position: relative;
+  }
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  main {
+    margin: 10px auto;
+    width: 80%;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 24px;
+    box-shadow: 0 6px 10px black;
+    margin-bottom: 1rem;
+  }
+  .heading {
+    font-size: 2rem;
+  }
+  #intro,
+  #content {
+    margin: 0 auto;
+    width: 90%;
+    font-size: 0.9rem;
+    text-align: justify;
+  }
+
+  .footer {
+    font-size: 0.7rem;
+    text-align: center;
+    margin: 0.5rem auto;
+    width: 100%;
+  }
+
+  .card {
+    border: 1px solid #ccc; /* Bordo delle card */
+    border-radius: 10px; /* Angoli arrotondati */
+    overflow: hidden; /* Nasconde eventuali sporgenze */
+    margin: 0.25rem; /* Margine intorno alle card */
+    width: 90%; /* Larghezza delle card, raggruppate in due */
+    height: auto;
+    padding: 0.25rem;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="topnav" id="myTopnav">
+  <a href="index.html">Home</a>
+        <a href="total_chatbot.html">Total Analyzer</a> 
+  <a href="txtchatbot.html">Text Chatbot</a>
+  <a href="devbot.html">Web Dev Bot</a>          
+  <a href="dalle.html">Image Creator</a>
+  <a href="pdfchatbot.html">PDF Chatbot</a>
+  <a href="tts.html">Text to Speech</a>
+  <a href="whisper.html">Audio Trascriber</a>
+  <a href="#" class="active">VD GPTs</a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+
+<main>
+  <section id="intro">
+    <h1 class="heading">VivacityGPT Complete GPTs</h1>
+  <p><i>Action first, without boundaries!</i></p><hr>
+  </section>
+  <section id="content">
+          
+<div class="card">
+<img src="blogging.jpg" alt="Image 1" class="card-image">
+<div class="card-content">
+<h2>AI Blog Post Creator</h2>
+<p>Insert a topic and generate the text, image and voice files for your blog.</p>
+<a href="blogpostcreator.html" class="card-link"><b>Use the tool!</b></a>
+</div>
+</div>
+          
+<div class="card">
+<img src="psycho.png" alt="Image 1" class="card-image">
+<div class="card-content">
+<h2>AI Psychoanalyst</h2>
+<p>Write your dream, and generate a complete analysis and an oniric image.</p>
+<a href="psycho_bot.html" class="card-link"><b>Use the tool!</b></a>
+</div>
+</div>
+
+<div class="card">
+<img src="img_rebuilder.jpg" alt="Image 2" class="card-image">
+<div class="card-content">
+<h2>AI Image Rebuilder</h2>
+<p>Upload an image, get the description and produce a new variant.</p>
+<a href="img_rebuilder.html" class="card-link"><b>Use the tool!</b></a>
+</div>
+</div>  
+          
+<div class="card">
+<img src="script_reader.jpg" alt="Image 1" class="card-image">
+<div class="card-content">
+<h2>AI Transcript Creator</h2>
+<p>Insert your movie transcript and generate an audio file. Up to 6 actors!</p>
+<a href="transcript_creator.html" class="card-link"><b>Use the tool!</b></a>
+</div>
+</div>   
+          
+<div class="card">
+<img src="langages.jpg" alt="Image 1" class="card-image">
+<div class="card-content">
+<h2>AI Language Teacher</h2>
+<p>Learn the fundamentals of 9 languages in 13 straightforward lessons!</p>
+<a href="language_teacher.html" class="card-link"><b>Use the tool!</b></a>
+</div>
+</div> 
+          
+<div class="card">
+<img src="chatter.jpg" alt="Image 1" class="card-image">
+<div class="card-content">
+<h2>AI Voice Chatbot</h2>
+<p>Advanced chatbot for voice chats, with web search and image generation (english only)!</p>
+<a href="voicechatter_advanced.html" class="card-link"><b>Use the tool!</b></a>
+</div>
+</div>   
+          
+<div class="card">
+<img src="art_critic.jpg" alt="Image 1" class="card-image">
+<div class="card-content">
+<h2>AI Art Critic</h2>
+<p>Upload an image with your piece of art, and get a critic analysis!</p>
+<a href="art_critic.html" class="card-link"><b>Use the tool!</b></a>
+</div>
+</div>  
+          
+<div class="card">
+<img src="interface_analyzer.jpg" alt="Image 1" class="card-image">
+<div class="card-content">
+<h2>AI Interface Analyzer</h2>
+<p>Upload a screenshot of your webpage or app and get a full professional analysis.</p>
+<a href="interface_analyzer.html" class="card-link"><b>Use the tool!</b></a>
+</div>
+</div>             
+
+<div class="card">
+<img src="interface_analyzer.jpg" alt="Image 1" class="card-image">
+<div class="card-content">
+<h2>AI Website Builder</h2>
+<p>Describe the design of your landing page and generate the visual Front-End and full code.</p>
+<a href="website_builder.html" class="card-link"><b>Use the tool!</b></a>
+</div>
+</div>   
+          
+<div class="card">
+<img src="book_creator.jpg" alt="Image 1" class="card-image">
+<div class="card-content">
+<h2>AI Book Plot Creator</h2>
+<p>Insert a title, a genre and a brief plot, and let the GTP generate your book plot in details.</p>
+<a href="book_creator.html" class="card-link"><b>Use the tool!</b></a>
+</div>
+</div>
+          
+<div class="card">
+<img src="sommelier.jpg" alt="Image 1" class="card-image">
+<div class="card-content">
+<h2>AI Virtual Sommelier</h2>
+<p>Plan your perfect dinner following this Virtual Sommelier advices for courses and wines!</p>
+<a href="virtual_sommelier.html" class="card-link"><b>Use the tool!</b></a>
+</div>
+</div>
+          
+<div class="card">
+<img src="skynet.jpg" alt="Image 1" class="card-image">
+<div class="card-content">
+<h2>Skynet</h2>
+<p>Chat with the most iconical and agressive artificial intelligence ever!</p>
+<a href="skynet.html" class="card-link"><b>Use the tool!</b></a>
+</div>
+</div>           
+          
+</section>
+<div class="footer">Powered by Vivacity Design Web Agency, May 2024<br>
+Torna ai <a href="../servizi_online.html">Servizi Online</a>
+</div>
+</main>
+<br>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+        
+   
+        
+</script>
+
+</body>
+</html>

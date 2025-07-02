@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">        
+  <title>VivacityGPT Complete - AI Language Teacher</title>
+  <style>
+* {
+  margin: 0;
+  padding: 0;
+box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+
+  background-color: #f4f4f4;
+    background: url("langages.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;      
+}
+          
+          
+header {
+  background-color: transparent;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #000;
+  z-index: 100;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: rgba(4, 190, 109, 1);
+
+  color: black;
+}
+
+.topnav a.active {
+  background-color: rgba(4, 190, 109, 1);
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}          
+
+.container {
+  max-width: 80%;
+        min-height: 40rem;
+  margin: 2rem auto;
+  padding: 20px;
+  background-color: transparent;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px black;
+        backdrop-filter: blur(2px);
+}
+          
+.preloader {
+  width: 48px;
+}           
+
+h2,
+h1,
+h3 {
+  color: white;
+  text-shadow: 2px 4px 10px black;
+}
+h1 {
+  font-size: 2.4rem;
+}
+
+.language-select {
+  margin: 20px auto;
+  display: block;
+  text-align: center;
+}
+
+.lesson-content {
+  margin: 20px;
+}
+
+#lesson-description {margin: 12px 0; min-height: 10rem; padding: 4px 6px; border-radius: 12px; box-shadow: 0 4px 8px black;}          
+          
+.lessons-panel {
+  text-align: center;
+}
+
+.buttons-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+}
+
+.lesson-button,
+#ttsgenerator,
+#languages,
+#native {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s linear;
+          margin: 1rem auto;
+        display: block;
+}
+
+.lesson-button:hover,
+#ttsgenerator:hover {
+  background-color: #6a0dad;
+}
+#audioPlayer {
+display: block;
+        margin: 0 auto;
+}          
+          
+</style>
+
+</head>
+<body>
+
+<div class="topnav" id="myTopnav">
+  <a href="index.html">Home</a>
+        <a href="total_chatbot.html">Total Analyzer</a> 
+  <a href="txtchatbot.html">Text Chatbot</a>
+  <a href="devbot.html">Web Dev Bot</a>        
+  <a href="dalle.html">Image Creator</a>
+  <a href="pdfchatbot.html">PDF Chatbot</a>
+  <a href="tts.html">Text to Speech</a>
+  <a href="whisper.html">Audio Trascriber</a>  
+<a href="vd_gpts.html" class="active">VD GPTs</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>         
+        
+<header>
+  <h1>AI Language Teacher</h1>        
+</header>        
+<div class="container">
+
+
+  <div class="language-select">
+    <label for="native"><b>What is your NATIVE language?</b><br></label>
+    <select id="native">
+      <option value="Italian">Italian</option>
+      <option value="English" selected>English</option>
+      <option value="French">French</option>
+      <option value="Spanish">Spanish</option>
+      <option value="Portuguese">Portuguese</option>
+      <option value="Russian">Russian</option>
+      <option value="Polish">Polish</option>
+      <option value="Turk">Turk</option>
+      <option value="German">German</option>
+      <option value="Korean">Korean</option>
+      <option value="Japanese">Japanese</option>
+      <option value="Swahili">Shawili</option>
+    </select>
+  </div>          
+        
+        
+  <div class="language-select">
+    <label for="languages"><b>What language do you want to LEARN?</b><br></label>
+    <select id="languages">
+      <option value="Italian" selected>Italian</option>
+      <option value="English">English</option>
+      <option value="French">French</option>
+      <option value="Spanish">Spanish</option>
+      <option value="Portuguese">Portuguese</option>
+      <option value="Russian">Russian</option>
+      <option value="Polish">Polish</option>
+      <option value="Turk">Turk</option>
+      <option value="German">German</option>
+      <option value="Korean">Korean</option>
+      <option value="Japanese">Japanese</option>
+      <option value="Swahili">Shawili</option>            
+    </select>
+  </div>
+      
+
+  <div class="lessons-panel">
+    <h3>Lessons:</h3>
+    <div class="buttons-container">
+      <button class="lesson-button" onclick="generatelesson('01')">Lesson 1</button>
+      <button class="lesson-button" onclick="generatelesson('02')">Lesson 2</button>
+      <button class="lesson-button" onclick="generatelesson('03')">Lesson 3</button>
+      <button class="lesson-button" onclick="generatelesson('04')">Lesson 4</button>
+      <button class="lesson-button" onclick="generatelesson('05')">Lesson 5</button>
+      <button class="lesson-button" onclick="generatelesson('06')">Lesson 6</button>
+      <button class="lesson-button" onclick="generatelesson('07')">Lesson 7</button>
+      <button class="lesson-button" onclick="generatelesson('08')">Lesson 8</button>
+      <button class="lesson-button" onclick="generatelesson('09')">Lesson 9</button>
+      <button class="lesson-button" onclick="generatelesson('10')">Lesson 10</button>
+      <button class="lesson-button" onclick="generatelesson('11')">Lesson 11</button>
+      <button class="lesson-button" onclick="generatelesson('12')">Lesson 12</button>
+      <button class="lesson-button" onclick="generatelesson('13')">Lesson 13</button> 
+      <button class="lesson-button" onclick="generatelesson('14')">Lesson 14</button>      
+    </div>
+  </div>
+  <div class="lesson-content">
+    <h2 id="lesson-title">Lesson title</h2>
+    <p id="lesson-description">
+      The chatbot generated lesson will be displayed here. When generated, click on the button to generate the audio lesson.
+    </p>
+  </div>
+  <button id="ttsgenerator" onclick="readlesson()">Read aloud</button>
+        <audio id="audioPlayer" controls></audio>
+</div>
+
+<script>
+        
+  function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}  
+        
+        
+let prompt = "";
+function generatelesson(x) {
+  // Array con le lezioni
+  const lessons = {
+    "01": "Introduction of the language, alphabet and structure of the affirmative sentences",
+    "02": "Greetings, introducing to someone, saying Thank you and I am sorry",
+    "03": "Pronouns, Family, Friends, and Relationships",
+    "04": "Verbs at the Present tense",      
+    "05": "Structure of the interrogative and negative sentences",
+    "05": "Food and Beverages",
+    "06": "Adjectives and how to describe people and places",
+    "07": "Numbers, Date and Time, Seasons and Weather",
+    "08": "Common phrases, formal and informal conversation",
+    "09": "Asking for directions and help",
+    "10": "Verbs at the past tense",
+    "11": "Verbs at the future tense",
+    "12": "Grammar cases: nominative, accusative, dative, genitive, locative, terminative, ablative, causative",      
+    "13": "Building articulated sentences with conjunctions",
+    "14": "Typical idiomatics expressions"      
+  };
+
+  // Variabile per la stringa della lezione
+
+  // Controlla se la lezione esiste
+  if (lessons[x]) {
+    prompt = lessons[x];
+  } else {
+    prompt = "Lesson number not valid.";
+  }
+
+        let selectedLanguage = document.getElementById("languages").value;
+        let nativeLanguage = document.getElementById("native").value;
+  document.getElementById("lesson-title").innerText =
+    "Lesson " + x + ": " + prompt;
+
+  getChatGPTResponse(nativeLanguage, selectedLanguage, prompt);
+}
+
+// Fuction to interrogate OpenAI model and get response (TXT chatbot - simple chat)
+async function getChatGPTResponse(nativel, language, subject) {
+  const apikey = localStorage.getItem("openaikey");
+
+  console.log(apikey);
+  if (apikey === "") {
+    alert("No OpenAI API Key found.");
+  } else {
+    console.log(apikey);
+  }
+  const fullrequest = "I am " + nativel + " and want to learn the " + language + " language, please teach me the basis regarding " + subject + ". The lesson must be in my native language, " + nativel;
+  console.log(language, subject, fullrequest);
+  const chatContainer = document.getElementById("lesson-description");
+        chatContainer.innerText = "";
+  const typingIndicator = document.createElement("p");
+  typingIndicator.id = "typing-indicator";
+  typingIndicator.innerHTML =
+    '<img src="preloader.gif" class="preloader" alt="Loading...">'; // need to have this gif in your folder
+  chatContainer.appendChild(typingIndicator);
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+
+        Authorization: "Bearer " + apikey
+      },
+      body: JSON.stringify({
+        model: "gpt-4.1-nano", // new model up to may 2024
+        messages: [{ role: "user", content: fullrequest }]
+      })
+    });
+    if (!response.ok) {
+      throw new Error("Error while requesting to the API");
+    }
+    const data = await response.json();
+    if (
+      !data.choices ||
+      !data.choices.length ||
+      !data.choices[0].message ||
+      !data.choices[0].message.content
+    ) {
+      throw new Error("Invalid API response");
+    }
+
+    const chatGPTResponse = data.choices[0].message.content.trim();
+
+    var cleanResponse = chatGPTResponse.replace(
+      /(```html|```css|```javascript|```php|```python|```vb|```vb.net|cpp|java|csharp)(.*?)/gs,
+      "$2"
+    );
+    console.log(chatGPTResponse);
+    cleanResponse = cleanResponse.replace(/```/g, "");
+    cleanResponse = cleanResponse.replace(/\*\*(.*?)\*\*/g, "$1").replace(/#/g, "");
+
+    chatContainer.innerText = cleanResponse;
+  } catch (error) {
+    console.error(error);
+    // manage errors with a warning
+    alert(
+      "An error occurred during the request. Check your OpenAI account or retry later."
+    );
+  }
+}
+        
+function readlesson() {
+  const apikey = localStorage.getItem("openaikey"); 
+  console.log(apikey);
+        const lesson = document.getElementById("lesson-description");
+  const prompt = lesson.innerText;
+  const selectedvoice = "nova";
+
+  if (prompt) {
+    fetch("https://api.openai.com/v1/audio/speech", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apikey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini-tts",
+        input: prompt,
+        voice: selectedvoice
+      })
+    })
+      .then((response) => response.blob())
+      .then((blob) => {
+        const audioUrl = URL.createObjectURL(blob);
+        const audioPlayer = document.getElementById("audioPlayer");
+        audioPlayer.src = audioUrl;
+        audioPlayer.play();
+      })
+      .catch((error) => {
+        console.error("Error while converting TTS: ", error);
+      });
+  } else {
+    alert("Please insert a text prompt before converting.");
+  }
+}        
+        
+</script>
+
+</body>
+</html>

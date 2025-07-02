@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VivacityGPT Complete - AI Interface Analyzer</title>
+    <style>
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f8ff;
+  color: white;
+  background: url("interface_analyzer.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+header {
+  background-color: transparent;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #000;
+  z-index: 100;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: rgba(4, 190, 109, 1);
+
+  color: black;
+}
+
+.topnav a.active {
+  background-color: rgba(4, 190, 109, 1);
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;      
+  justify-content: center;
+        align-items: center;
+  margin-bottom: 20px;
+}
+.image-box {
+  width: 48rem;
+  height: 40rem;
+  margin: 1rem;
+  border: 1px solid black;
+  border-radius: 24px;
+  padding: 8px;
+  box-shadow: 0 4px 10px black;
+  text-align: center;
+  background: transparent;
+  backdrop-filter: blur(4px);
+}
+
+.image-box img {
+  max-width: 98%;
+  border-radius: 4px;
+  height: auto;
+  overflow-Y: auto;      
+  margin: 0 auto;
+}
+#text-box {
+  background-color: rgba(255,255,255,0.5);      
+  width: 80%;
+  border: 1px solid black;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px black;
+  padding: 0.5rem;
+  margin: 1rem auto;
+  color: black;
+  backdrop-filter: blur(4px);
+}
+
+select {
+width: 10rem; 
+  border: 1px solid black;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px black;
+  padding: 0.5rem;
+  margin: 1rem auto;
+  color: black;        
+ }
+h2,
+h1,
+h3 {
+  color: white;
+  text-shadow: 2px 4px 10px black;
+}
+h1 {
+  font-size: 2.4rem;
+}
+
+.preloader {
+  width: 48px;
+}
+
+button {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s linear;
+}
+
+button:hover {
+  background-color: #6a0dad;
+}
+#vfeedback {
+            color: white;
+            }
+            
+#voperations, #commands {
+  width: 28rem;
+  padding: 0.5rem;
+  margin: 0 auto;
+text-align: center;
+}
+
+    </style>
+</head>
+<body>
+<div class="topnav" id="myTopnav">
+  <a href="index.html">Home</a>
+        <a href="total_chatbot.html">Total Analyzer</a> 
+  <a href="txtchatbot.html">Text Chatbot</a>
+  <a href="devbot.html">Web Dev Bot</a>        
+  <a href="dalle.html">Image Creator</a>
+  <a href="pdfchatbot.html">PDF Chatbot</a>
+  <a href="tts.html">Text to Speech</a>
+  <a href="whisper.html">Audio Trascriber</a>  
+<a href="vd_gpts.html" class="active">VD GPTs</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+        
+<header>
+  <h1>AI Interface Analyzer</h1>
+        <small>Get a full professional review of your website or app Front End!</small>
+</header>
+
+
+<div class="container">
+  <div class="image-box" id="original-image">
+<img id="uploaded-image" src="" alt="Uploaded Image" style="max-width: 90%; display: none;">
+  </div>
+<select id="choice">
+        <option value="">Select Type</option>
+        <option value="website">Website</option>
+        <option value="application">Application</option>
+</select>
+</div>
+<div id="voperations">
+              <form enctype="multipart/form-data" method="POST">
+                <input class="fixedwidth" type="file" accept=".jpg,.png" name="file" id="vfile-input">
+                <div id="vfeedback"></div>
+                <button id="vuploadBtn" type="submit"> Upload the image</button>
+                <button type="button" onclick="getChatGPTResponseIMG();"> Analyze the image</button>
+              </form>
+</div>
+<div id="text-box">
+  <b>Your Image analysis will appear here...</b>
+  <p id="image-analysis-output"></p>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+          <script>
+
+                  
+            $(document).ready(function () {
+			 $('#vuploadBtn').click(function (e) {
+				e.preventDefault();
+                     
+                     
+				$.ajax({
+			     url: 'vupload.php', // make sure you have the upload script in the folder
+				 type: 'POST',
+				 data: new FormData($('form')[0]),
+				 processData: false,
+				 contentType: false,
+				 success: function (response) {
+                         
+					const data = JSON.parse(response); // Parsing the JSON response
+					if (data.status === "success") {
+					$('#vfeedback').html("Your file was uploaded.");
+                            
+                            // Ottenere il file caricato
+var fileInput = document.getElementById('vfile-input');
+var file = fileInput.files[0];
+
+if (file) {
+// Creare un URL temporaneo per l'immagine
+var originalimageUrl = URL.createObjectURL(file);
+
+// Mostrare l'immagine nel div
+$('#uploaded-image').attr('src', originalimageUrl).show();
+}
+                            
+                            
+					// Pass the URL of the uploaded image to the analyze function
+					$('#voperations button[type="button"]').attr('onclick', `submitImage("${data.url}");`);
+					} else {
+					$('#vfeedback').html(data); // In caso di errori, mostra l'errore
+				 }
+				}
+			});
+			});
+			});
+//end Vision JQuery
+                  
+          </script>
+
+<script>
+
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+
+// Creation of the memory array with system prompt
+let chatMemory = [];
+chatMemory = createMemory([{
+    role: "system",
+    content: "You are senior Web Designer. You will analyze the image of a website layout and you will provide a professional analysis focalizing on the following points: structure, choice of colors, typography, navigation, text content arrangement. For each of these point you will also provide a rating between 1 (very bad) and 10 (very good). You will also use the same rating scale to provide an overall final rating of the website layout, and and you will suggest how to improve the final layout."
+}]);
+
+// Definition of structure for context memory
+function createMemory(messages) {
+    const memory = [];
+    for (const msg of messages) {
+        memory.push({
+            role: msg.role,
+            content: msg.content
+        });
+    }
+    return memory;
+}
+
+// VISION
+        
+async function submitImage(imgUrl) {
+  return await getChatGPTResponseIMG("https://www.vivacitydesign.net/vdgptscomplete/" + imgUrl, chatMemory);
+}        
+        
+// Function to interrogate OpenAI model and get response
+async function getChatGPTResponseIMG(fileUrl, chatMemory) {
+        console.log(fileUrl);
+const apikey = localStorage.getItem("openaikey");
+console.log(apikey);
+
+if (apikey === "") {
+alert("No OpenAI API Key found.");
+return; // Aggiunto per evitare ulteriori elaborazioni in caso di errore.
+}
+var selectedValue = document.querySelector('#choice').value;
+        console.log(selectedValue);
+const chatContainer = document.getElementById("text-box");
+const typingIndicator = document.createElement("p");
+typingIndicator.id = "typing-indicator";
+typingIndicator.innerHTML = '<img src="preloader.gif" class="preloader" alt="Loading...">';
+chatContainer.appendChild(typingIndicator);
+
+try {
+response = await fetch("https://api.openai.com/v1/chat/completions", {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+Authorization: "Bearer " + apikey
+},
+body: JSON.stringify({
+model: "gpt-4.1-nano",
+messages: [
+...chatMemory.map((item) => ({ ...item })),
+{
+role: "user",
+content: [
+{
+type: "text",
+text: `You are senior Web Designer and Desktop applications developer. You will analyze the image of a ${selectedValue} layout and you will provide a professional analysis focalizing on the following points: structure, choice of colors, typography, navigation, icons and general graphics, text content arrangement. For each of these point you will also provide a rating between 1 (very bad) and 10 (very good). You will also use the same rating scale to provide an overall final rating of the ${selectedValue} layout, and and you will suggest how to improve the final layout.`
+},
+{
+type: "image_url",
+image_url: {
+url: fileUrl // Usa l'URL fornito come fileUrl
+}
+}
+]
+}
+],
+max_tokens: 600 // Includi il limite dei token se necessario
+})
+});
+
+if (!response.ok) {
+throw new Error("Error while requesting to the API.");
+}
+
+const data = await response.json();
+if (!data.choices || !data.choices.length || !data.choices[0].message || !data.choices[0].message.content) {
+throw new Error("Invalid API response.");
+}
+
+var chatGPTResponse = data.choices[0].message.content;
+chatGPTResponse = chatGPTResponse.replace(/\*\*(.*?)\*\*/g, "$1");        
+
+chatContainer.removeChild(typingIndicator);
+const responsediv = document.getElementById("image-analysis-output");
+responsediv.innerText= chatGPTResponse;
+
+// Generate a timestamp for unique filename
+const timestamp = new Date().toISOString().replace(/[:.]/g, "-"); // Format timestamp for filename
+const fileName = `interface_analysis_${timestamp}.txt`;
+
+// Create a Blob containing the analysis text
+const blob = new Blob([chatGPTResponse], { type: 'text/plain' });
+
+// Create a link element
+const link = document.createElement("a");
+link.href = window.URL.createObjectURL(blob); // Create an object URL for the Blob
+link.download = fileName; // Set the download attribute with the filename
+
+// Optionally, style the link (you can customize this according to your needs)
+link.innerText = "Download Analysis";
+link.style.display = "block"; // Make it a block element
+link.style.marginTop = "10px"; // Add some space above
+
+// Append the link to the chat container
+chatContainer.appendChild(link);
+        
+
+// updates memory with the received response
+chatMemory.push({ role: "user", content: fileUrl }); // Assicurati di inserire il contenuto giusto qui
+chatMemory.push({ role: "assistant", content: chatGPTResponse });
+
+// updates memory context
+return chatMemory;
+} catch (error) {
+console.error(error);
+// error handling
+alert(
+"An error occurred during the request. Check your OpenAI account or try later."
+);
+}
+}
+// END VISION
+
+
+
+</script>
+
+
+</body>
+</html>

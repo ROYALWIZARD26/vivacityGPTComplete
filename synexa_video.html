@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Generation Tool</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+background-color: #f4f4f4;
+margin: 0;
+padding: 20px;
+}
+
+.container {
+max-width: 600px;
+margin: auto;
+background: white;
+padding: 20px;
+border-radius: 8px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+text-align: center;
+}
+
+input[type="text"] {
+width: 100%;
+padding: 10px;
+margin: 10px 0;
+border: 1px solid #ccc;
+border-radius: 4px;
+}
+
+button {
+width: 100%;
+padding: 10px;
+background-color: #28a745;
+color: white;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+
+button:hover {
+background-color: #218838;
+}
+
+.video-container {
+margin-top: 20px;
+text-align: center;
+}
+
+.error-message {
+color: red;
+margin-top: 10px;
+text-align: center;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>AI Video Generation Tool</h1>
+<input type="text" id="prompt" placeholder="Enter your video prompt here" />
+<button id="generateButton">Generate Video</button>
+<div id="videoContainer" class="video-container"></div>
+<div id="errorMessage" class="error-message"></div>
+</div>
+<script>
+document.getElementById('generateButton').addEventListener('click', async () => {
+const prompt = document.getElementById('prompt').value;
+const videoContainer = document.getElementById('videoContainer');
+const errorMessage = document.getElementById('errorMessage');
+const apikey = '5OdsLOpByh68D26KVszFfaZOaDUUC3y4pI6so6te'; // Make sure this is a valid token
+
+// Clear previous video and error message
+videoContainer.innerHTML = '';
+errorMessage.textContent = '';
+
+if (!prompt) {
+errorMessage.textContent = 'Please enter a prompt.';
+return;
+}
+
+try {
+// Call the Synexa API to generate the video
+const response = await fetch('https://api.synexa.ai/v1/predictions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'x-api-key': `Bearer ${apikey}` // Authorization header
+  },
+  body: JSON.stringify({
+    model: "tencent/hunyuan-video", // Required model identifier
+    input: {
+      prompt: prompt,
+      fps: 24, // Optional parameters
+      width: 640,
+      height: 480,
+      infer_steps: 50,
+      video_length: 129,
+      embedded_guidance_scale: 6
+    }
+  })
+});
+
+
+if (!response.ok) {
+throw new Error('Error generating video: ' + response.statusText);
+}
+
+const data = await response.json();
+const videoUrl = data.output.url; // Assuming the API returns a URL in this format
+
+// Create a video element and set the source
+const videoElement = document.createElement('video');
+videoElement.src = videoUrl;
+videoElement.controls = true;
+videoElement.autoplay = true;
+videoElement.width = 640; // Set desired width
+videoContainer.appendChild(videoElement);
+
+} catch (error) {
+errorMessage.textContent = error.message;
+}
+});  
+</script>
+</body>
+</html>
+

@@ -1,0 +1,711 @@
+<?php
+$isLoggedIn = false; // Impostazione predefinita
+session_start(); // Start the session
+
+// Check if the user is logged in
+if (!isset($_SESSION['user'])) {
+    
+} else {
+$isLoggedIn = true;
+}
+
+
+$user = $_SESSION['user'];
+?>
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">        
+  <title>VivacityGPT Complete - AI voice chatbot</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css'>
+<style>
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f8ff;
+  color: white;
+  background: url("chatter.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+        
+header {
+  background-color: transparent;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #000;
+  z-index: 100;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: rgba(4, 190, 109, 1);
+
+  color: black;
+}
+
+.topnav a.active {
+  background-color: rgba(4, 190, 109, 1);
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+} 
+        
+#lateral-panel {
+    display: none; /* Initially hide the panel */
+    width: 15%; /* Set the width of the panel */
+    height: 36rem;
+    overflow-Y: auto;
+    background-color: transparent; /* Background color */
+    padding: 10px; /* Padding */
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(197, 235, 234, .7);
+    backdrop-filter: blur(2px);
+    position: fixed; /* Fixed position */
+    top: 180px; /* Position from the top */
+    left: 10px; /* Position from the left */
+} 
+        
+#lateral-panel ul li {
+font-size: .8rem;        
+}
+#lateral-panel h3 {
+text-align: center;        
+}        
+.chatlink {
+        color: black;
+        text-decoration: none;
+        }        
+.chatlink:hover {
+        color: black;
+        text-decoration: underline;
+        } 
+.chatlistlink {
+        color: white;
+        text-decoration: none;
+        }        
+.chatlistlink:hover {
+        color: rgba(197, 235, 234, .7);
+        text-decoration: underline;
+        }          
+        
+main {
+  max-width: 80%;
+  min-height: 40rem;
+  margin: 2rem auto;
+  padding: 20px;
+  background-color: transparent;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(197, 235, 234, .7);
+        backdrop-filter: blur(2px);
+}
+        
+.logged-in {
+            width: 65%;
+        }        
+          
+.preloader {
+  width: 48px;
+}           
+
+h2, h1, h3, h4{
+  color: white;
+  text-shadow: 2px 4px 10px black;
+  margin: .5rem;      
+}
+h1 {
+  font-size: 2.4rem;
+}
+        
+#search-form {
+  width: 50%;
+  margin: 0 auto;
+  position: relative;
+}
+#search-form input {
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 10px 15px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+}
+#search-form button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  width: 3rem;
+  text-align: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #333;
+}
+#saveChatBtn {
+        display: none;
+        margin: 8px auto;
+        text-align: center;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: rgba(197, 235, 234, .7);
+        color: black;
+        cursor: pointer;
+        }  
+#saveChatBtn:hover {
+        display: block;
+        background: black;
+        color: rgba(197, 235, 234, .7);
+        }          
+        
+.user-message {
+  background-color: rgba(197, 235, 234, 1);
+  padding: .25rem;
+  width: 100%;
+  align-self: start;
+  text-align: left;
+  border: 1px solid black;
+  color: black;
+  font-size: 1rem;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.chatgpt-message {
+  background-color: rgba(197, 235, 288, 1);
+  padding: .25rem;
+  width: 100%;
+  align-self: start;
+  text-align: justify;
+  color: black;
+  font-size: 1rem;
+  border: 1px solid black;
+  box-shadow: 0 4px 8px black;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: start;
+  line-height: 1;
+} 
+         
+        
+#chathistory {
+   border: 1px solid rgba(197, 235, 234, .8);
+        padding: 10px;
+        margin-top: 10px;
+        height: 600px;
+        overflow-y: auto;     
+}   
+        
+#userrequest {
+  border: 1px solid black;
+        padding: 10px;
+        margin-top: 10px;
+        height: auto;      
+}  
+        
+.info {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 1200px) {
+  #search-form { width: 50%; }
+}
+@media (max-width: 768px) {
+  .container { padding: 30px 35px; }
+  #search-form { width: 100%; }
+  .info { font-size: 0.5rem; }
+}
+
+</style>
+
+</head>
+<body>
+<div class="topnav" id="myTopnav">
+  <a href="index.html">Home</a>
+        <a href="total_chatbot.html">Total Analyzer</a> 
+  <a href="txtchatbot.html">Text Chatbot</a>
+  <a href="devbot.html">Web Dev Bot</a>        
+  <a href="dalle.html">Image Creator</a>
+  <a href="pdfchatbot.html">PDF Chatbot</a>
+  <a href="tts.html">Text to Speech</a>
+  <a href="whisper.html">Audio Trascriber</a>  
+<a href="vd_gpts.html" class="active">VD GPTs</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>         
+        
+<header>
+  <h1>AI Voice Chatbot</h1>        
+</header>          
+        
+
+<div id="lateral-panel" style="<?php echo $isLoggedIn ? 'display: block;' : 'display: none;'; ?>">
+<h3>User panel</h3>
+<h4>Benvenuto, <?php echo $user['Name']; ?> </h4>
+
+<small>Torna alla <a href="/userarea/userboard.php" class="chatlistlink">Dashboard</a></small><hr> 
+<br>
+<p><b>Chat History</b></p><br>
+<ul id="chatHistoryList"></ul> <!-- Target this list for updates -->
+<br>
+</div>
+        
+<main class="<?php echo $isLoggedIn ? 'logged-in' : ''; ?>">
+<form action="https://www.google.com/search" method="get" target="_blank" id="search-form">
+<input id="prompt" type="text" placeholder="Activate Microphone to chat..." autocomplete="off" autofocus><br>
+
+</form>
+<button id="saveChatBtn" type="button" style="<?php echo $isLoggedIn ? 'display: block;' : 'display: none;'; ?>">Save Chat</button> <!-- Add Save Chat Button -->        
+<div id="chathistory">
+<!-- <div id="userrequest"></div> -->
+</div> <!-- Div per la cronologia chat -->
+<p class="info"></p>
+<audio controls id="audioPlayer" style="display: none;"></audio>
+      
+</main>
+
+<script>
+const searchForm = document.querySelector("#search-form");
+const searchFormInput = searchForm.querySelector("input");
+const info = document.querySelector(".info");
+const chatContainer = document.getElementById("chathistory");
+ const inputElement = document.getElementById("userrequest"); 
+let recognition;        
+        
+
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+  console.log("Your Browser supports speech Recognition");
+
+  recognition = new SpeechRecognition();
+  recognition.continuous = true;
+
+  let idleTimer;
+
+  searchForm.insertAdjacentHTML(
+    "beforeend",
+    '<button type="button"><i class="fas fa-microphone"></i></button>'
+  );
+  searchFormInput.style.paddingRight = "50px";
+
+  const micBtn = searchForm.querySelector("button");
+  const micIcon = micBtn.firstElementChild;
+
+  micBtn.addEventListener("click", micBtnClick);
+  function micBtnClick() {
+    if (micIcon.classList.contains("fa-microphone")) {
+      recognition.start();
+    } else {
+      recognition.stop();
+    }
+  }
+
+  recognition.addEventListener("start", startSpeechRecognition);
+  function startSpeechRecognition() {
+    micIcon.classList.remove("fa-microphone");
+    micIcon.classList.add("fa-microphone-slash");
+    searchFormInput.focus();
+    console.log("Voice activated, SPEAK");
+
+    clearTimeout(idleTimer); // Pulisci il timer quando il riconoscimento inizia
+  }
+
+  recognition.addEventListener("end", endSpeechRecognition);
+  function endSpeechRecognition() {
+    micIcon.classList.remove("fa-microphone-slash");
+    micIcon.classList.add("fa-microphone");
+    searchFormInput.focus();
+    console.log("Speech recognition service disconnected");
+  }
+
+  recognition.addEventListener("result", resultOfSpeechRecognition);
+  function resultOfSpeechRecognition(event) {
+    const current = event.resultIndex;
+    const transcript = event.results[current][0].transcript;
+
+    // Aggiunta del messaggio alla cronologia
+    const timestamp = new Date().toLocaleTimeString();
+    const message = `${timestamp} - Guest: ${transcript}`;
+    //inputElement.innerHTML += `<div>${message}</div>`;
+
+    // Se viene detto "go", ferma il riconoscimento
+    if (transcript.toLowerCase().trim() === "go") {
+      recognition.stop();
+            
+    } else {
+      // Resetta il timer di inattività
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        recognition.stop();
+               // Ferma il riconoscimento se non ci sono stati eventi
+      }, 2000);
+            // 2 secondi di inattività
+    }
+    sendMessage(transcript);      
+  }
+
+  info.textContent = 'Voice Commands: "stop recording", "reset input", "go"';
+} else {
+  console.log("Your Browser does not support speech Recognition");
+  info.textContent = "Your Browser does not support Speech Recognition";
+}
+
+// INIZIO JAVASCRIPT COMUNICAZIONE CON OPENAI TEXT E TXT ANALYZER
+
+let chatMemory = [];
+chatMemory = createMemory([
+  {
+    role: "system",
+    content:
+      "You are a funny bot."
+  }
+]);
+console.log(chatMemory);
+
+// Definistion of structure for context memory
+function createMemory(messages) {
+  const memory = [];
+  for (const msg of messages) {
+    memory.push({ role: msg.role, content: msg.content });
+  }
+  return memory;
+}
+
+// function to send the message
+async function sendMessage(transcript) {
+        const apikey = localStorage.getItem("openaikey");
+          console.log(apikey);
+
+  if (apikey === "") {
+    alert("No OpenAI API Key found.");
+  } else {
+    console.log(apikey);
+  }
+ 
+  const userInput = transcript;
+        console.log(userInput);
+  if (userInput !== "") {
+    showMessage("Guest", userInput, "");
+    chatMemory = await getChatGPTResponse(userInput, chatMemory);
+
+    //inputElement.value = "";
+  }
+}
+
+// Show the message in the chat container
+function showMessage(sender, message, tokens, downloadLink) {
+  
+  const typingIndicator = document.getElementById("typing-indicator");
+
+  if (typingIndicator && sender === "VivacityGPT") {
+    chatContainer.removeChild(typingIndicator);
+  }
+
+  // Crea un nuovo elemento di messaggio
+  const messageElement = document.createElement("div");
+
+  // Gestisci separatamente il messaggio del Guest
+  if (sender === "Guest") {
+    messageElement.innerHTML = `<p class="user-message"><b>${sender}</b>: ${message}</p>`;
+    //messageElement.classList.add("user-message");
+  } else {
+    // Mostra il messaggio e i token della risposta della chatbot
+    const timestampElement = document.createElement("p");
+    timestampElement.innerHTML = `${sender}: ${message} `;
+    timestampElement.classList.add("chatgpt-message");
+
+    // Aggiungi il timestamp sopra l'iframe
+    messageElement.appendChild(timestampElement);
+
+
+    const separator = document.createElement("p");
+    separator.innerHTML = `${tokens}`;
+    //messageElement.innerHTML += `${sender}: `;
+    messageElement.classList.add("chatgpt-message");
+    messageElement.appendChild(separator);
+
+    // Aggiungi il link per il download di codice generato
+    const downloadElem = document.createElement("div");
+    downloadElem.innerHTML = downloadLink;
+    messageElement.appendChild(downloadElem);
+  }
+
+  // Appendere il messaggio all'container
+  chatContainer.appendChild(messageElement);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+// Fuction to interrogate OpenAI model and get response (TXT chatbot - simple chat)
+async function getChatGPTResponse(userInput, chatMemory = []) {
+  const apikey = localStorage.getItem("openaikey");
+  
+  console.log(apikey);
+  if (apikey === "") {
+    alert("No OpenAI API Key found.");
+  } else {
+    console.log(apikey);
+  }
+  const chatContainer = document.getElementById("chathistory");
+  const typingIndicator = document.createElement("p");
+  typingIndicator.id = "typing-indicator";
+  typingIndicator.innerHTML =
+    '<img src="preloader.gif" class="preloader" alt="Loading...">'; // need to have this gif in your folder
+  chatContainer.appendChild(typingIndicator);
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+
+        Authorization: "Bearer " + apikey
+      },
+      body: JSON.stringify({
+        //model: "gpt-3.5-turbo-0125",
+        model: "gpt-4.1-nano", // new model up to may 2024
+        messages: [...chatMemory, { role: "user", content: userInput }]
+      })
+    });
+    if (!response.ok) {
+      throw new Error("Error while requesting to the API");
+    }
+    const data = await response.json();
+    if (
+      !data.choices ||
+      !data.choices.length ||
+      !data.choices[0].message ||
+      !data.choices[0].message.content
+    ) {
+      throw new Error("Invalid API response");
+    }
+
+    const chatGPTResponse = data.choices[0].message.content.trim();
+
+    var cleanResponse = chatGPTResponse.replace(
+      /(```html|```css|```javascript|```php|```python|```vb|```vb.net|cpp|java|csharp)(.*?)/gs,
+      "$2"
+    );
+    console.log(chatGPTResponse);
+    cleanResponse = cleanResponse.replace(/```/g, "");
+    cleanResponse = cleanResponse.replace(/\*\*(.*?)\*\*/g, "$1");
+
+    // manages token from the response
+    const tokenCount = document.createElement("p");
+
+    // Verifica che "completion_tokens" sia presente nella struttura degli oggetti restituiti dalla tua API
+    if (data.usage.completion_tokens) {
+      const requestTokens = data.usage.prompt_tokens;
+      const responseTokens = data.usage.completion_tokens;
+      const totalTokens = data.usage.total_tokens;
+      const pricepertokenprompt = 0.10 / 1000000; //uses gpt-4.1-nano price 
+      const pricepertokenresponse = 0.4 / 1000000; 
+      const priceperrequest = pricepertokenprompt * requestTokens;
+      const priceperresponse = pricepertokenresponse * responseTokens;
+      const totalExpense = priceperrequest + priceperresponse;
+      tokenCount.innerHTML = `<hr>Your request used ${requestTokens} tokens and costed ${priceperrequest.toFixed(
+        6
+      )}USD<br>This response used ${responseTokens} tokens and costed ${priceperresponse.toFixed(
+        6
+      )}USD<br>Total Tokens: ${totalTokens}. This interaction costed you: ${totalExpense.toFixed(
+        6
+      )}USD (audio not included).`;
+    } else {
+      tokenCount.innerHTML = "Unable to track the number of used tokens.";
+    }
+
+    // Crea un blob e un link per scaricare la chat
+    const blob = new Blob([cleanResponse], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const downloadLink = `<a href="${url}" download="chat.txt" class="chatlink">Click here to download the generated answer</a>`;
+
+    // Mostrare il messaggio con il link di download finale ora creato
+    showMessage(
+      "VivacityGPT",
+      cleanResponse,
+      tokenCount.innerHTML,
+      downloadLink
+    );
+     
+    convertiTestoInAudio(cleanResponse);      
+    //showMessage("VivacityGPT", cleanResponse, tokenCount.innerHTML);
+
+    // adds response to memory context
+    chatMemory.push({ role: "user", content: userInput });
+    chatMemory.push({ role: "assistant", content: cleanResponse });
+
+    // updates context memory
+    return chatMemory;
+  } catch (error) {
+    console.error(error);
+    // manage errors with a warning
+    alert(
+      "An error occurred during the request. Check your OpenAI account or retry later."
+    );
+  }
+}
+        
+function convertiTestoInAudio(response) {
+  const apikey = localStorage.getItem("openaikey"); 
+  console.log(apikey);
+  const prompt = response;
+  const selectedvoice = "nova";
+
+  if (prompt) {
+    fetch("https://api.openai.com/v1/audio/speech", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apikey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        //model: "tts-1",
+        model: "gpt-4o-mini-tts",      
+        input: prompt,
+        voice: selectedvoice
+      })
+    })
+      .then((response) => response.blob())
+      .then((blob) => {
+        const audioUrl = URL.createObjectURL(blob);
+        const audioPlayer = document.getElementById("audioPlayer");
+        audioPlayer.src = audioUrl;
+        audioPlayer.play();
+        // Aggiungi l'evento per riavviare il riconoscimento dopo la riproduzione
+		audioPlayer.addEventListener("ended", () => {
+		recognition.start(); // Riavvia il riconoscimento vocale
+		});    
+            
+      })
+      .catch((error) => {
+        console.error("Errore while converting TTS: ", error);
+      });
+  } else {
+    alert("Please insert a text prompt before converting.");
+  }
+        
+}   
+        
+
+// FINE JAVASCRIPT COMUNICAZIONE CON OPENAI TEXT E TXT ANALYZER
+
+// chat savings and updatings
+        
+document.getElementById('saveChatBtn').addEventListener('click', saveChat);
+
+async function saveChat() {
+const chatContainer = document.getElementById("chathistory");
+const chatEntries = [...chatContainer.children].map(entry => entry.innerHTML).join('\n'); // Capture chat messages
+const userID = "<?php echo $_SESSION['user']['Id']; ?>"; // Assuming user ID is in the session
+const timestamp = new Date().toISOString();
+
+const response = await fetch('save_vchatter_history.php', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify({ chat: chatEntries, userID: userID, timestamp: timestamp })
+});
+
+if (response.ok) {
+alert('Chat saved successfully!');
+updateChatHistoryList(); // Call to update history list function
+} else {
+alert('Failed to save chat.');
+}
+}
+
+
+async function updateChatHistoryList() {
+const historyContainer = document.getElementById('chatHistoryList'); // Target the specific list
+historyContainer.innerHTML = ''; // Clear current list first
+
+const response = await fetch('get_vchatter_history.php'); // Get chat history from the server
+const history = await response.json();
+
+if (history.length > 0) {
+history.forEach(file => {
+const li = document.createElement('li');
+const link = document.createElement('a');
+        link.classList.add("chatlistlink");
+
+link.href = "#"; // Prevent default link behavior
+link.textContent = file; // Set the link text to the file name
+link.addEventListener('click', (event) => {
+event.preventDefault(); // Prevent the default anchor behavior
+loadChatContent(file); // Load the chat content for the clicked file
+});
+
+li.appendChild(link); // Append link to the list item
+historyContainer.appendChild(li); // Append the list item to the list
+});
+} else {
+historyContainer.innerHTML = '<li>No chat history available.</li>'; // Display message if no files
+}
+}
+
+async function loadChatContent(filename) {
+// Fetch the content of the specific chat file
+const response = await fetch(`load_vchatter_content.php?file=${encodeURIComponent(filename)}`);
+
+if (response.ok) {
+const content = await response.text();
+const chatContainer = document.getElementById("chathistory");
+chatContainer.innerHTML = content; // Display chat content in the chat history area
+chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom if necessary
+} else {
+alert('Failed to load chat content.');
+}
+}
+        
+        
+        
+        
+
+document.addEventListener('DOMContentLoaded', function () {
+updateChatHistoryList(); // Call this function when the DOM is fully loaded
+});     
+        
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <title>VivacityGPT Complete - PDF Chatbot</title>  
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;        
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(4, 190, 109, 1);
+  background-image: url("smoke_PNG965.png"),
+    url("smoke_PNG966.png"),
+    url("smoke_PNG967.png");
+  background-repeat: repeat-x;
+  background-position: 0 20%, 0 100%, 0 50%, 0 100%, 0 0;
+  background-size: 2000px, 2000px, 2000px;
+  animation: 120s smoke infinite linear;
+}
+
+@keyframes smoke {
+  100% {
+    background-position: -5000px 20%, -800px 95%, 500px 50%, 1000px 100%, 400px 0;
+  }
+}        
+
+.topnav {
+  overflow: hidden;
+  background-color: #000;
+  z-index: 100;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: rgba(4, 190, 109, 1);
+  color: black;
+}
+
+.topnav a.active {
+  background-color: rgba(4, 190, 109, 1);
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+        
+#Feedback {
+  font-size: 0.9rem;
+  color: black;
+  padding: 4px 6px;
+} 
+        
+main {
+        position: absolute;
+        top: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+  margin: 1rem auto;
+  width: 80%;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 24px;
+  box-shadow: 0 6px 10px black;
+}
+#apikey {
+  width: 60%;
+  margin: 0.5rem;
+border-radius: 10px;
+padding: 4px 8px;
+}
+#prompt {
+  width: 80%;
+  margin: 0.5rem;
+  resize: none;
+border-radius: 10px;
+padding: 4px 8px;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+margin-top: 4px;
+  background: #f00;
+  color: #fff;        
+}
+
+button:hover {
+  background: #fff;
+  color: #f00;
+}  
+#pdfcommands {
+  width: 70%;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem auto;
+  box-shadow: 0 2px 4px black;
+}
+
+#responseDiv {
+  margin: .5rem auto;
+  display: flex;
+  flex-direction: column;
+        align-items: center;
+  height: 70vh;
+  width: 95%;
+  overflow-y: auto;
+  padding: 0.5rem;
+  font-family: "Spectral", serif;
+  border: 1px solid black;
+}
+#responseDiv p {
+  width: 90%;
+  background: rgba(4, 190, 109, 1);
+  padding: 0.5rem;
+  text-align: justify;
+  margin: 2px auto;
+  font-size: 0.9rem;
+  border-radius: 0.5rem;
+  color: black;
+        border: 1px solid black;
+        align-self: end;
+}
+        
+#responseDiv div {
+  width: 90%;
+  background: transparent;
+  padding: 0.5rem;
+  text-align: justify;
+        align-self: start;
+  margin: 2px auto;
+  font-size: 0.9rem;
+  border-radius: 0.5rem;
+  color: black;
+        box-shadow: 0 6px 10px black;
+        border: 1px solid black;
+}        
+
+#modal {
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+  margin: 0 auto;
+  width: 26rem;
+  height: 12rem;
+  border-radius: 24px;
+  box-shadow: 0 2px 8px black;
+  background: #fff;
+        color: #000;
+  padding: .5rem 1rem;
+}
+#modal input {
+  width: 80%;
+  margin: 0.5rem;
+  resize: none;
+border-radius: 10px;
+padding: 4px 8px;
+}
+#modal button {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+margin-top: 4px;
+  background: #f00;
+  color: #fff;
+}   
+#modal button:hover {
+  background: #fff;
+  color: #f00;
+}         
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+main {
+  margin: 10px auto;
+  width: 80%;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 24px;
+  box-shadow: 0 6px 10px black;
+}
+        
+#modal {
+
+  width: 20rem;
+  height: 12rem;
+}        
+}
+
+@media screen and (max-width: 800px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+main {
+  margin: 10px auto;
+  width: 80%;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 24px;
+  box-shadow: 0 6px 10px black;
+}
+}
+</style>
+</head>
+<body>
+
+<div class="topnav" id="myTopnav">
+  <a href="index.html">Home</a>
+        <a href="total_chatbot.html">Total Analyzer</a> 
+  <a href="txtchatbot.html">Text Chatbot</a>
+  <a href="devbot.html">Web Dev Bot</a>          
+  <a href="dalle.html">Image Creator</a>
+  <a href="#" class="active">PDF Chatbot</a>
+  <a href="tts.html">Text to Speech</a>
+        <a href="whisper.html">Audio Trascriber</a>
+<a href="vd_gpts.html">VD GPTs</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+
+<main>
+        <h1>PDF Chatbot</h1>
+        <div style="padding: 8px; text-align: center;">
+        <a href="https://www.chatpdf.com/?via=alessandro-demontis" target="_blank" style="color: black;">Courtesy of ChatPDF</a>
+        </div>
+<hr>
+
+            <section id="pdfcommands">
+      <input type="file" id="pdfFileInput" /><br>
+      <button onclick="uploadPDF()">Upload PDF</button>
+      <button id="openModalLink">Load from URL</button>
+      <button onclick="deletePDF()">Delete PDF</button>
+      <button onclick="exportchat()" class="fixedwidth">Export Chat</button>              
+      <p id="Feedback" style="display: none;"></p>
+    </section>
+    <section id="pdfmainchat">
+      <input type="password" id="apikey" placeholder="Your API key" readonly><br>
+      <textarea rows=6 id="prompt" placeholder="Your prompt"></textarea><br>
+      <button onclick="sendQuestion()">Send</button>
+      <div id="responseDiv"></div>
+    </section>
+
+      <div id="modal" style="display: none;">
+              <h3>Load PDF from URL:</h3><hr>
+      <input type="text" id="pdfURLInput" placeholder="Enter PDF URL"><br>
+      <button id="uploadButton">Upload</button>
+    </div>
+        
+</main>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+
+var time = new Date();
+var hour = time.getHours();
+var minute = time.getMinutes(); 
+        
+let sourceId = "";
+const openModalLink = document.getElementById("openModalLink");
+const modal = document.getElementById("modal");
+const pdfURLInput = document.getElementById("pdfURLInput");
+const uploadButton = document.getElementById("uploadButton");
+
+// Event listener for opening the modal
+openModalLink.addEventListener("click", function () {
+  modal.style.display = "block";
+});
+
+// Event listener for uploading PDF from URL
+uploadButton.addEventListener("click", function () {
+  const pdfURL = pdfURLInput.value;
+  uploadPDFFromURL(pdfURL);
+  modal.style.display = "none";
+});
+
+function uploadPDF() {
+  const apiUrl = "https://api.chatpdf.com/v1";
+  var apikey = localStorage.getItem("chatpdfkey");      
+  document.getElementById("apikey").value = apikey; //apikeyfield02 is for ChatPDF
+  console.log(apikey);
+
+  const fileInput = document.getElementById("pdfFileInput");
+  const file = fileInput.files[0];
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  fetch(`${apiUrl}/sources/add-file`, {
+    method: "POST",
+    headers: {
+      "x-api-key": apikey
+    },
+    body: formData
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      sourceId = data.sourceId;
+      console.log("PDF uploaded. Source ID:", sourceId);
+      document.getElementById("Feedback").textContent =
+        "PDF uploaded successfully.";
+      document.getElementById("Feedback").style.display = "block";
+    })
+    .catch((error) => console.error("Error uploading PDF:", error));
+}
+
+function uploadPDFFromURL(pdfURL) {
+  const apiUrl = "https://api.chatpdf.com/v1";
+  var apikey = localStorage.getItem("chatpdfkey");      
+  document.getElementById("apikey").value = apikey; 
+  console.log(apikey);
+
+  const data = {
+    url: pdfURL
+  };
+
+  fetch(`${apiUrl}/sources/add-url`, {
+    method: "POST",
+    headers: {
+      "x-api-key": apikey,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      sourceId = data.sourceId;
+      console.log("PDF uploaded from URL. Source ID:", sourceId);
+      document.getElementById("Feedback").textContent =
+        "PDF uploaded successfully.";
+      document.getElementById("Feedback").style.display = "block";
+    })
+    .catch((error) => console.error("Error uploading PDF from URL:", error));
+}
+
+function deletePDF() {
+  const apiUrl = "https://api.chatpdf.com/v1";
+  var apikey = localStorage.getItem("chatpdfkey");      
+  document.getElementById("apikey").value = apikey; 
+  console.log(apikey);
+
+  if (!sourceId) {
+    console.error("Please upload a PDF first.");
+    return;
+  }
+
+  fetch(`${apiUrl}/sources/delete`, {
+    method: "POST",
+    headers: {
+      "x-api-key": apikey,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ sources: [sourceId] })
+  })
+    .then(() => {
+      console.log("PDF deleted successfully.");
+      sourceId = "";
+      document.getElementById("Feedback").textContent =
+        "PDF deleted successfully.";
+      document.getElementById("Feedback").style.display = "block";
+    })
+    .catch((error) => console.error("Error deleting PDF:", error));
+}
+
+function sendQuestion() {
+  const apiUrl = "https://api.chatpdf.com/v1";
+  var apikey = localStorage.getItem("chatpdfkey");      
+  document.getElementById("apikey").value = apikey; 
+  console.log(apikey);
+        
+  const prompt = document.getElementById("prompt").value;
+  responseDiv.innerHTML += "<p><b>[" + hour + ":" + minute + "] User:</b> " + prompt + "</p>";
+
+  if (!sourceId) {
+    console.error("Please upload a PDF first.");
+    return;
+  }
+
+  const data = {
+    referenceSources: true,
+    mainPoints: true,
+    questionExamples: true,
+    sourceId: sourceId,
+    messages: [
+      {
+        role: "user",
+        content: prompt
+      }
+    ]
+  };
+	
+  fetch(`${apiUrl}/chats/message`, {
+    method: "POST",
+    headers: {
+      "x-api-key": apikey,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const responseDiv = document.getElementById("responseDiv");
+      const response = document.createElement("div");
+   
+      response.innerText = '[' + hour + ':' + minute + '] VivacityGPT: ' +  data.content;
+      responseDiv.appendChild(response);
+          
+                    // Aggiungi il pulsante "Copia risposta"
+const copyButton = document.createElement("button");
+copyButton.innerText = "Copy to clipboard";
+copyButton.addEventListener("click", () => {
+  event.preventDefault();
+  const text = response.innerText;
+  const input = document.createElement("input");
+  input.value = text;
+  responseDiv.appendChild(input);
+  input.select();
+  document.execCommand("copy");
+  responseDiv.removeChild(input);
+alert("Answer was sent to Clipboard!");
+});
+responseDiv.appendChild(copyButton);
+          
+      console.log(data.content);
+      prompt.value = "";
+    })
+    .catch((error) => console.error("Error sending question:", error));
+}
+
+function exportchat() {
+  var chatContent = document.getElementById("responseDiv").innerText;
+
+  chatContent = chatContent.replace(/Copy to clipboard/g, "");
+
+  var currentTimestamp = new Date();
+  var datetime = currentTimestamp.toISOString();
+  var filename = "pdfchatsession_v" + datetime.replace(/[-:.]/g, "");
+
+  var blob = new Blob([chatContent], { type: "text/plain" });
+
+  var url = URL.createObjectURL(blob);
+
+  var downloadLink = document.createElement("a");
+  downloadLink.href = url;
+  downloadLink.download = filename + ".txt";
+  downloadLink.click();
+  URL.revokeObjectURL(url);
+}        
+</script>
+
+</body>
+</html>

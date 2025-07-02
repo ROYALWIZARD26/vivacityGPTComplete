@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <title>VivacityGPT Complete</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;        
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(4, 190, 109, 1);
+  background-image: url("smoke_PNG965.png"),
+    url("smoke_PNG966.png"),
+    url("smoke_PNG967.png");
+  background-repeat: repeat-x;
+  background-position: 0 20%, 0 100%, 0 50%, 0 100%, 0 0;
+  background-size: 2000px, 2000px, 2000px;
+  animation: 120s smoke infinite linear;
+}
+
+@keyframes smoke {
+  100% {
+    background-position: -5000px 20%, -800px 95%, 500px 50%, 1000px 100%,
+      400px 0;
+  }
+}        
+
+.topnav {
+  overflow: hidden;
+  background-color: #000;
+        z-index: 100;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: rgba(4, 190, 109, 1);
+        
+  color: black;
+}
+
+.topnav a.active {
+  background-color: rgba(4, 190, 109, 1);
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+        
+.heading {
+        font-size: 2.4rem;
+        }  
+        
+        hr {
+        background: transparent;
+                height: 4px;
+                border: 1px solid black inset;
+        }
+#intro, #content {
+        margin: 0 auto;
+        width: 80%;
+        font-size: 1rem;
+        text-align: justify;
+        } 
+.avatar {
+        width: 120px;
+        height: auto;
+        padding: 4px;
+        margin: .5rem 0;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px black;
+        }    
+.avatar img{
+border-radius: 10px;
+
+        }        
+        
+main {
+        position: absolute;
+        top: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+  margin: 1rem auto;
+  width: 80%;
+  text-align: center;
+  padding: 1rem 2rem;
+  border-radius: 24px;
+  box-shadow: 0 6px 10px black;
+        margin-bottom: 1rem;
+        }
+.footer {
+        font-size: .9rem;
+        text-align: center;
+        margin: 2rem 0 .5rem 0;
+        width: 100%;
+        } 
+
+#setupmodal {
+        margin: .25rem auto;
+        padding: .5rem;
+        
+        }        
+
+button {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+margin-top: 4px;
+  background: #f00;
+  color: #fff;
+}
+button:hover {
+  background: #fff;
+  color: #f00;
+}
+        
+.setupmodal {
+display: none;
+position: fixed;
+z-index: 1;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: auto;
+background-color: rgba(4, 190, 109, .5);
+color: #000;        
+}
+        
+
+.modal-content {
+background-color: rgba(4, 190, 109, 1);
+        color: #000;
+margin: 15% auto;
+padding: 2rem;
+border: 1px solid #888;
+width: 50%;
+box-shadow: 0 4px 10px black;
+border-radius: 18px;        
+}
+        
+#openaikeyInput, #chatpdfkeyInput {
+  width: 80%;
+  margin: 0.5rem;
+  resize: none;
+border-radius: 10px;
+padding: 4px 8px;
+}        
+
+.close {
+color: #000;
+float: center;
+font-size: 2rem;
+font-weight: bold;
+
+}
+
+.close:hover,
+.close:focus {
+color: black;
+cursor: pointer;
+}        
+        
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+main {
+  margin: 20px auto;
+  width: 80%;
+  text-align: center;
+  padding: .5rem;
+  border-radius: 24px;
+  box-shadow: 0 6px 10px black;
+        margin-bottom: 1rem;
+}
+.heading {
+        font-size: 1.8rem;
+        } 
+#intro, #content {
+        margin: 0 auto;
+        width: 80%;
+        font-size: .9rem;
+        text-align: justify;
+        }  
+        
+.footer {
+        font-size: .7rem;
+        text-align: center;
+        margin: .5rem auto;
+        width: 100%;
+        }        
+}
+
+@media screen and (max-width: 800px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+main {
+  margin: 10px auto;
+  width: 80%;
+  text-align: center;
+  padding: .5rem;
+  border-radius: 24px;
+  box-shadow: 0 6px 10px black;
+        margin-bottom: 1rem;
+}
+.heading {
+        font-size: 2rem;
+        }
+#intro, #content {
+        margin: 0 auto;
+        width: 80%;
+        font-size: .9rem;
+        text-align: justify;
+        } 
+.footer {
+        font-size: .7rem;
+        text-align: center;
+        margin: .5rem auto;
+        width: 100%;
+        }         
+}
+</style>
+</head>
+<body>
+
+<div class="topnav" id="myTopnav">
+  <a href="#" class="active">Home</a>
+        <a href="total_chatbot.html">Total Analyzer</a> 
+  <a href="txtchatbot.html">Text Chatbot</a>
+  <a href="devbot.html">Web Dev Bot</a>          
+  <a href="dalle.html">Image Creator</a>
+  <a href="pdfchatbot.html">PDF Chatbot</a>
+  <a href="tts.html">Text to Speech</a>
+  <a href="whisper.html">Audio Trascriber</a>
+  <a href="vd_gpts.html">VD GPTs</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+
+<main>
+  <section id="intro">
+    <h1 class="heading">VivacityGPT Complete v.15</h1>
+  <p><i>Action first, without boundaries!</i></p><hr>
+  </section>
+  <section id="content">
+  Vivacity Design uses the most modern Artificial Intelligence techniques for the creation and development of apps and web pages. We believe so much in what we develop that around 40% of our site was built by our team using the initial tool engine that later became our VivacityGPT!<br>
+In this series of pages we make available to all users our AI tools created through integration with OpenAI and <a href="https://www.chatpdf.com/?via=alessandro-demontis" target="_blank" style="color: black;">ChatPDF</a>, and brought together for the first time in a collection called <i>VivacityGPT Complete</i><br>
+          <br><b>News:</b> <i>Text Chatbot</i> now has <i>search the web</i> capability by using OpenAI new functionality. New GPTs added.<br>
+          <br>
+          <small>Last update: v.15, June 10-20, 2025.</small><br>
+          <center>
+                  <img src="chatbot_face_03.jpg" class="avatar">
+                  <div id="setupmodal">
+                          <button id="openModal">API Keys Setup</button>
+                  </div>
+                  
+                  	<div id="modal" class="setupmodal">
+					<div class="modal-content">
+					<div class="close">&times;</div><br>
+					<input type="text" id="openaikeyInput" placeholder="Enter OpenAI key"><br>
+					<input type="text" id="chatpdfkeyInput" placeholder="Enter ChatPDF key">
+                            <p id="modalfeedback"></p>
+					<button id="saveKeys">Save Keys</button><button id="resetKeys">Reset Keys</button>
+                            
+                    <script>
+                            function checkLocalStorageKeys() {
+							if(localStorage.getItem('openaikey')) {
+							var openaiKey = localStorage.getItem('openaikey');
+							document.getElementById('openaikeyInput').value = openaiKey;
+							} else {
+							document.getElementById('modalfeedback').innerText = "Configura le API key";
+							}
+
+							if(localStorage.getItem('chatpdfkey')) {
+							var chatpdfKey = localStorage.getItem('chatpdfkey');
+							document.getElementById('chatpdfkeyInput').value = chatpdfKey;
+							} else {
+							document.getElementById('modalfeedback').innerText = "Configura le API key";
+							}
+							}
+
+							checkLocalStorageKeys();
+                    </script>        
+					</div>
+					</div>
+          </center>
+  			<p>
+         <b>Disclaimer:</b><br>
+<small>To use the service, you must sign up for an OpenAI and a <a href="https://www.chatpdf.com/?via=alessandro-demontis" target="_blank" style="color: black;">ChatPDF</a> accounts and insert your personal API keys into our tools.<br>
+While <b>our tools are completely free</b>, OpenAI and <a href="https://www.chatpdf.com/?via=alessandro-demontis" target="_blank" style="color: black;">ChatPDF</a> accounts may charge the users for their API requests.<br>
+Please consult the providers policies on ratings and billings.</small>
+          </p>
+          
+  </section>
+<div class="footer">
+        <img src="button_poweredby.png"><br>
+        Created by Vivacity Design Web Agency, May 2024 - June 2025<br>
+Torna ai <a href="../servizi_online.html">Servizi Online</a>
+        </div></main>
+<br>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+        
+const openModalBtn = document.getElementById('openModal');
+const modal = document.getElementById('modal');
+const closeBtn = document.querySelector('.close');
+const saveKeysBtn = document.getElementById('saveKeys');
+const resetKeysBtn = document.getElementById('resetKeys');        
+const openaikeyInput = document.getElementById('openaikeyInput');
+const chatpdfkeyInput = document.getElementById('chatpdfkeyInput');
+
+openModalBtn.addEventListener('click', () => {
+modal.style.display = 'block';
+});
+
+closeBtn.addEventListener('click', () => {
+modal.style.display = 'none';
+});
+
+saveKeysBtn.addEventListener('click', () => {
+localStorage.setItem('openaikey', openaikeyInput.value);
+localStorage.setItem('chatpdfkey', chatpdfkeyInput.value);
+var apikey1 = localStorage.getItem("openaikey"); 
+var apikey2 = localStorage.getItem("chatpdfkey");        
+
+        console.log(apikey1, apikey2);
+        modal.style.display = 'none';
+});
+
+resetKeysBtn.addEventListener('click', () => {
+localStorage.setItem('openaikey', '');
+localStorage.setItem('chatpdfkey', '');
+document.getElementById('openaikeyInput').value = "";
+document.getElementById('chatpdfkeyInput').value = "";       
+
+});        
+        
+</script>
+
+</body>
+</html>

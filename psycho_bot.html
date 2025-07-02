@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VivacityGPT Complete - AI Psychoanalyst</title>
+    <style>
+* {
+box-sizing: border-box;
+}
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f8ff;
+background: url("psycho.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+header {
+    background-color: transparent;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+            
+.topnav {
+  overflow: hidden;
+  background-color: #000;
+        z-index: 100;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+        
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: rgba(4, 190, 109, 1);
+        
+  color: black;
+}
+
+.topnav a.active {
+  background-color: rgba(4, 190, 109, 1);
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}            
+
+main {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+}
+
+section {
+    margin-bottom: 40px;
+    padding: .5rem 1rem;
+    background-color: transparent;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px black;
+backdrop-filter: blur(2px);
+}
+
+footer {
+padding: .5rem 1rem;
+color: white;
+text-align: right;
+}
+
+h2, h1, h3 {
+    color: white;
+	text-shadow: 2px 4px 10px black;
+}
+h1 {
+font-size: 2.4rem;
+}
+            
+.preloader {
+  width: 48px;
+}             
+
+textarea {
+    width: 100%;
+    resize: vertical;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: .5rem;
+}
+
+button {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+font-size: 1.1rem;
+transition: all .2s linear;
+
+}
+
+button:hover {
+    background-color: #6a0dad;
+}
+
+#story-output, #image-output, #transcription-output {
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fafafa;
+}
+
+        .generatedimg {
+        max-width: 512px;
+                height: auto;
+        }
+
+    </style>	
+</head>
+<body>
+        <div class="topnav" id="myTopnav">
+  <a href="index.html">Home</a>
+                <a href="total_chatbot.html">Total Analyzer</a> 
+  <a href="txtchatbot.html">Text Chatbot</a>
+  <a href="devbot.html">Web Dev Bot</a>        
+  <a href="dalle.html">Image Creator</a>
+  <a href="pdfchatbot.html">PDF Chatbot</a>
+  <a href="tts.html">Text to Speech</a>
+  <a href="whisper.html">Audio Trascriber</a>  
+<a href="vd_gpts.html" class="active">VD GPTs</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+        
+    <header>
+        <h1>AI Dreams Interpreter</h1>
+    </header>
+    <main>
+        <section id="dream-analysis">
+            <h2>Deam Analysis</h2>
+            <textarea id="dream-input" placeholder="Tell me your dream..." rows="10"></textarea>
+
+            <button id="analyze-button" onclick="sendMessage()">Analyze dream</button>
+<button id="reset-button" onclick="restart()">Reset</button>
+            <div id="story-output"></div>
+            
+            <button id="speak-button" onclick="convertiTestoInAudio()">Listen to the analysis</button>
+                <p>
+	<audio controls id="audioPlayer"></audio>
+               </p>
+        </section>
+        <section id="image-creation">
+            <h2>Dream Imaging</h2>
+            <button id="generate-image-button" onclick="generateImage()">Generate oniric image</button>
+            <div id="image-output"></div>
+        </section>
+
+
+    </main>
+    <footer>
+        <p><b>&copy; 2024  - Vivacity Design Web Agency</b></p>
+    </footer>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}        
+        
+// Creation of the memory array with system prompt
+let chatMemory = [];
+chatMemory = createMemory([{
+    role: "system",
+    content: "You are a AI psychoanalyst and will provide an interpretation of the dreams of the user."
+}]);
+
+// Definition of structure for context memory
+function createMemory(messages) {
+    const memory = [];
+    for (const msg of messages) {
+        memory.push({
+            role: msg.role,
+            content: msg.content
+        });
+    }
+    return memory;
+}
+
+async function sendMessage() {
+        const apikey = localStorage.getItem("openaikey");
+          console.log(apikey);
+
+  if (apikey === "") {
+    alert("No OpenAI API Key found.");
+  } else {
+    console.log(apikey);
+  }
+    const inputElement = document.getElementById("dream-input");
+    const userInput = inputElement.value.trim();
+    if (userInput !== "") {
+      chatMemory = await getChatGPTResponse(userInput, chatMemory);
+
+      
+    }
+  }
+        
+function restart() {
+        const inputElement = document.getElementById("dream-input");
+		inputElement.value = "";
+}        
+
+function showMessage(sender, message) {
+  const chatContainer = document.getElementById("story-output");
+  const typingIndicator = document.getElementById("typing-indicator");
+  if (typingIndicator && sender === "Psycho") {
+    chatContainer.removeChild(typingIndicator);
+  }
+
+  // Create new message elements
+  const messageElement = document.createElement("div");
+  if (sender == "Psycho") {
+
+    messageElement.innerText = `${sender}: ${message}`;
+
+
+  }
+
+
+
+  chatContainer.appendChild(messageElement);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+// Fuction to interrogate OpenAI model and get response (TXT chatbot - simple chat)
+async function getChatGPTResponse(userInput, chatMemory = []) {
+  const apikey = localStorage.getItem("openaikey");      
+ 
+console.log(apikey);
+  if (apikey === "") {
+    alert("No OpenAI API Key found.");
+  } else {
+    console.log(apikey);
+  }      
+  const chatContainer = document.getElementById("story-output");
+  const typingIndicator = document.createElement("p");
+  typingIndicator.id = "typing-indicator";
+  typingIndicator.innerHTML =
+    '<img src="preloader.gif" class="preloader" alt="Loading...">'; // need to have this gif in your folder
+  chatContainer.appendChild(typingIndicator);
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+
+        Authorization: "Bearer " + apikey
+      },
+      body: JSON.stringify({
+        model: "gpt-4.1-nano", // new model up to may 2024
+        messages: [...chatMemory, { role: "user", content: userInput }]
+      })
+    });
+    if (!response.ok) {
+      throw new Error("Error while requesting to the API");
+    }
+    const data = await response.json();
+    if (
+      !data.choices ||
+      !data.choices.length ||
+      !data.choices[0].message ||
+      !data.choices[0].message.content
+    ) {
+      throw new Error("Invalid API response");
+    }
+
+    const chatGPTResponse = data.choices[0].message.content.trim();
+        
+    var cleanResponse = chatGPTResponse.replace(
+      /(```html|```css|```javascript|```php|```python|```vb|```vb.net|cpp|java|csharp)(.*?)/gs,
+      "$2"
+    );
+    console.log(chatGPTResponse);      
+    cleanResponse = cleanResponse.replace(/```/g, "");
+    cleanResponse = cleanResponse.replace(/\*\*(.*?)\*\*/g, "$1");      
+        
+
+    // manages token from the response
+    const tokenCount = document.createElement("p");
+        
+
+
+
+    showMessage("Psycho", cleanResponse);
+
+    // adds response to memory context
+    chatMemory.push({ role: "user", content: userInput });
+    chatMemory.push({ role: "assistant", content: cleanResponse });
+
+    // updates context memory
+    return chatMemory;
+  } catch (error) {
+    console.error(error);
+    // manage errors with a warning
+    alert(
+      "An error occurred during the request. Check your OpenAI account or retry later."
+    );
+  }
+}
+
+function convertiTestoInAudio() {
+  const apikey = localStorage.getItem("openaikey"); 
+  console.log(apikey);
+        const analysis = document.getElementById("story-output");
+  const prompt = analysis.getElementsByTagName("div")[0].innerText;
+  const selectedvoice = "nova";
+
+  if (prompt) {
+    fetch("https://api.openai.com/v1/audio/speech", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apikey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini-tts",
+        input: prompt,
+        voice: selectedvoice
+      })
+    })
+      .then((response) => response.blob())
+      .then((blob) => {
+        const audioUrl = URL.createObjectURL(blob);
+        const audioPlayer = document.getElementById("audioPlayer");
+        audioPlayer.src = audioUrl;
+        audioPlayer.play();
+      })
+      .catch((error) => {
+        console.error("Error while converting TTS: ", error);
+      });
+  } else {
+    alert("Please insert a text prompt before converting.");
+  }
+}
+
+async function generateImage() {
+  const apikey = localStorage.getItem("openaikey");       
+  console.log(apikey);
+  const prompt = document.getElementById("dream-input").value;
+  const chatContainer = document.getElementById("image-output");
+console.log(prompt);
+  const typingIndicator = document.createElement("p");
+  typingIndicator.id = "typing-indicatorIMG";
+  typingIndicator.innerHTML =
+    '<img src="preloader.gif" class="preloader" alt="Loading...">';
+  chatContainer.appendChild(typingIndicator);
+
+  try {
+    const response = await fetch(
+      "https://api.openai.com/v1/images/generations",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + apikey
+        },
+        body: JSON.stringify({
+          model: "dall-e-2",
+          prompt: prompt,
+          n: 1,
+          size: "512x512"
+        })
+      }
+    );
+
+    const data = await response.json();
+    const imageUrl = data.data[0].url;
+
+    const responseDiv = document.createElement("div");
+    const image = document.createElement("img");
+    image.src = imageUrl;
+    image.alt = "Generated Image";
+    image.classList.add("generatedimg");
+    responseDiv.appendChild(image);
+
+    const downloadLink = document.createElement("a");
+    const spacer = document.createElement("br");
+    downloadLink.href = imageUrl;
+    downloadLink.target = "_blank";
+    downloadLink.textContent = "Download Image";
+    responseDiv.appendChild(spacer);
+    responseDiv.appendChild(downloadLink);
+
+    chatContainer.removeChild(typingIndicator);
+    chatContainer.appendChild(responseDiv);
+  } catch (error) {
+    console.error(error);
+    alert(
+      "An error occurred during the request. Check your OpenAI account or try later."
+    );
+  }
+}        
+
+</script>
+</body>
+</html>

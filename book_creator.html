@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Book Summary Creator</title>
+<style>
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background-color: #f0f8ff;
+color: #333;
+}
+.hero {
+background-color: rgba(4, 190, 109, 1);
+color: white;
+padding: 60px 20px;
+text-align: center;
+}
+.hero h1 {
+margin: 0;
+font-size: 3em;
+}
+        
+.topnav {
+  overflow: hidden;
+  background-color: #000;
+        z-index: 100;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+        
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: rgba(4, 190, 109, 1);
+        
+  color: black;
+}
+
+.topnav a.active {
+  background-color: rgba(4, 190, 109, 1);
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}        
+        
+.main-container {
+display: flex;
+align-items: start;        
+height: calc(100vh - 200px);
+flex-wrap: wrap; /* for responsiveness */
+}
+.left-side, .right-side {
+flex: 1;
+min-width: 300px;
+display: flex;
+padding: 20px;
+box-sizing: border-box;
+}
+.left-side {
+flex-direction: column;
+justify-content: flex-start;        
+background-color: #ffffff;
+}
+form {
+display: flex;
+flex-direction: column;
+gap: 15px;
+flex: 1;
+}
+input[type="text"], select, textarea {
+width: 100%;
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 4px;
+font-family: Arial, sans-serif;
+font-size: 1em;
+box-sizing: border-box;
+}
+textarea {
+resize: vertical;
+height: 150px;
+}
+button {
+padding: 12px;
+margin: .5rem 0;        
+background-color: rgba(4, 190, 109, 1);
+color: white;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+font-size: 1em;
+transition: background-color 0.3s;
+}
+button:hover {
+background-color: #000;
+color: rgba(4, 190, 109, 1)        
+}
+button #generateBookStructure {
+background-color: #28a745;
+margin-top: 10px;
+}
+#generateBookStructure:hover {
+background-color: #218838;
+}
+.right-side {
+background-color: #e6f2ff;
+display: flex;
+align-items: flex-start;
+justify-content: flex-start;
+}
+.preview {
+width: 90%;
+height: 90%;
+border: 2px dashed rgba(4, 190, 109, 1);
+padding: 20px;
+box-sizing: border-box;
+overflow: auto;
+background-color: #fff;
+border-radius: 8px;
+}
+.preview h2 {
+margin-top: 0;
+margin-bottom: 15px;
+}
+.preview-section {
+margin-bottom: 10px;
+}
+.preview-section h3 {
+margin: 0 0 5px 0;
+font-size: 1.2em;
+color: #007BFF;
+}
+pre {
+white-space: pre-wrap;
+word-wrap: break-word;
+}
+</style>
+</head>
+<body>
+<div class="topnav" id="myTopnav">
+  <a href="index.html">Home</a>
+  <a href="total_chatbot.html">Total Analyzer</a> 
+  <a href="txtchatbot.html">Text Chatbot</a>
+  <a href="devbot.html">Web Dev Bot</a>        
+  <a href="dalle.html">Image Creator</a>
+  <a href="pdfchatbot.html">PDF Chatbot</a>
+  <a href="tts.html">Text to Speech</a>
+  <a href="whisper.html">Audio Trascriber</a>  
+<a href="vd_gpts.html" class="active">VD GPTs</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+        
+<div class="hero">
+<h1>AI Book Plot Creator</h1>
+</div>
+<div class="main-container">
+<!-- Input form -->
+<div class="left-side">
+<form id="summaryForm">
+<input type="text" id="title" placeholder="Book Title" required />
+<select id="genre" required>
+<option value="" disabled selected>Select Genre</option>
+<option value="Fiction">Fiction</option>
+<option value="Non-fiction">Non-fiction</option>
+<option value="Science Fiction">Science Fiction</option>
+<option value="Fantasy">Fantasy</option>
+<option value="Mystery">Mystery</option>
+<option value="Biography">Biography</option>
+</select>
+<textarea id="mainIdea" placeholder="Main Idea" required></textarea>
+<button id="submit" type="submit">Generate Preview</button>
+</form>
+<!-- Button to generate book structure from GPT -->
+<button id="createBookStructure">Create Book Structure</button>
+</div>
+<!-- Preview area -->
+<div class="right-side">
+<div class="preview" id="preview">
+<h2 id="preview-title">Your Book Title</h2>
+</div>
+</div>
+</div>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}        
+        
+        
+// --- Function to generate prompt based on user input ---
+function buildBookPrompt(title, genre, mainIdea) {
+return `Create a detailed book outline diding the plot in chapters.
+Use Markdown formatting with headers, bold, italics, and paragraphs**.
+
+Details:
+- Title: "${title}"
+- Genre: "${genre}"
+- Main Idea: "${mainIdea}"
+
+Format your response with headings for chapters, bold for section titles, italics for emphasis, and paragraphs for narrative. Make sure to characterize the main actors of the story, and make the secondary plots, if any, coherent. Use a stotytelling style for chapters`;
+}
+
+// --- Function to communicate with OpenAI ---
+async function getChatGPTResponse(userInput, chatMemory = []) {
+const apikey = localStorage.getItem("openaikey");
+if (!apikey || apikey.trim() === "") {
+alert("Please set your OpenAI API key in localStorage with key 'openaikey'.");
+return;
+}
+
+try {
+// Show a temporary loading message in preview
+const previewDiv = document.getElementById("preview");
+const loadingMsg = document.createElement("p");
+loadingMsg.id = "loading-message";
+loadingMsg.innerHTML = '<em>Loading...</em>';
+previewDiv.appendChild(loadingMsg);
+
+const response = await fetch("https://api.openai.com/v1/chat/completions", {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+Authorization: "Bearer " + apikey,
+},
+body: JSON.stringify({
+model: "gpt-4.1-nano", // or another model you have access to
+messages: [...chatMemory, { role: "user", content: userInput }],
+}),
+});
+
+// Remove loading message
+const loadingElem = document.getElementById("loading-message");
+if (loadingElem) loadingElem.remove();
+
+if (!response.ok) {
+throw new Error("Error requesting OpenAI API");
+}
+const data = await response.json();
+
+const messageContent = data.choices[0].message.content.trim();
+console.log (messageContent);
+//let cleanResponse = messageContent.replace(/\*(.*?)\*/g, '<em>$1</em>');
+let cleanResponse = messageContent.replace(/\*\*(.*?)\*\*/g, '<em>$1</em>');        
+// Optional: support underscores for italics
+// cleanResponse = cleanResponse.replace(/_(.*?)_/g, '<em>$1</em>');
+
+cleanResponse = cleanResponse
+.replace(/^### (.+)$/gm, '<p style="color: black;">$1</p>') // '###' header to h4
+.replace(/^## (.+)$/gm, '<h3 style="font-size: 1.2rem; color: black; margin: 10px 0;">$1</h3>') // '##' header to h3
+.replace(/^# (.+)$/gm, '<h2 style="font-size: 1.4rem; color: red; margin: 16px 0;">$1</h2>'); // '#' header to h2
+
+// Convert Markdown italics (*text*) or underscore _text_ to HTML <em> or <strong>
+cleanResponse = cleanResponse.replace(/\*(.*?)\*/g, '<em>$1</em>');
+// Supporting underscore for bold
+cleanResponse = cleanResponse.replace(/_(.*?)_/g, '<strong>$1</strong>');
+
+// Replace newlines with <br>
+cleanResponse = cleanResponse.replace(/\n/g, '<br>');
+console.log (cleanResponse);
+return cleanResponse;
+//return  messageContent;       
+} catch (err) {
+console.error(err);
+alert("Error fetching response: " + err.message);
+return null;
+}
+}
+
+// --- Event handler: generate book outline ---
+document
+.getElementById("createBookStructure")
+.addEventListener("click", async () => {
+const title = document.getElementById("title").value.trim();
+const genre = document.getElementById("genre").value;
+const mainIdea = document.getElementById("mainIdea").value.trim();
+
+if (!title || !genre || !mainIdea) {
+alert(
+"Please fill in Title, Genre, and Main Idea before generating."
+);
+return;
+}
+
+const prompt = buildBookPrompt(title, genre, mainIdea);
+let chatMemory = [];
+
+const outline = await getChatGPTResponse(prompt, chatMemory);
+if (outline) {
+document.getElementById("preview").innerHTML = `
+<h2>${title} - Book Outline</h2>
+<div>${outline}</div>
+`;
+}
+        
+// Create the Save button
+const saveBtn = document.createElement('button');
+saveBtn.id = 'savePlot'; // set an ID
+saveBtn.textContent = 'Save Plot to Text File';
+saveBtn.style.marginTop = '1rem';        
+
+// Add the event listener for saving
+saveBtn.addEventListener('click', () => {
+const content = document.getElementById("preview").innerText || document.getElementById("preview").textContent;
+const filename = `${title || 'book_outline'}.txt`;
+saveTextAsFile(content, filename);
+});
+
+// Append the button to the preview div
+document.getElementById("preview").appendChild(saveBtn);
+// Create the Save button end here        
+});
+        
+//function to save the plot to file
+        function saveTextAsFile(content, filename) {
+const blob = new Blob([content], { type: 'text/plain' });
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = filename;
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+URL.revokeObjectURL(url);
+}        
+//function to save the plot to file end here        
+
+// --- Update current preview dynamically when form is submitted ---
+const form = document.getElementById("summaryForm");
+const titleInput = document.getElementById("title");
+const genreSelect = document.getElementById("genre");
+const mainIdeaInput = document.getElementById("mainIdea");
+const previewTitle = document.getElementById("preview-title");
+
+// Prevent default form submit and update preview
+form.addEventListener("submit", (e) => {
+e.preventDefault();
+const title = titleInput.value.trim();
+const genre = genreSelect.value;
+const mainIdea = mainIdeaInput.value.trim();
+
+if (title) previewTitle.innerHTML = title;
+// Clear previous preview and add current info
+const previewDiv = document.getElementById("preview");
+previewDiv.innerHTML = `<h2>${title}</h2>`;
+previewDiv.innerHTML += `<div class="preview-section"><h3>Genre: ${genre}</h3></div>`;
+previewDiv.innerHTML += `<div class="preview-section"><h3>Main Idea: ${mainIdea}</h3></div>`;
+       
+});
+</script>
+<!-- Note: To use the GPT integration, set your API key in localStorage:
+<script>
+// Example: localStorage.setItem('openaikey', 'YOUR_API_KEY_HERE');
+</script> -->
+</body>
+</html>
